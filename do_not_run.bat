@@ -2,26 +2,26 @@
 setlocal enabledelayedexpansion
 chcp 1252 >nul
 echo ==========================================
-echo = Dbut de l'installation
+echo = Début de l'installation
 echo ==========================================
 echo.
 
-REM Dfinir le chemin vers les installateurs
+REM Définir le chemin vers les installateurs
 set "INSTALLER_DIR=dependencies"
 
 REM Obtenir le chemin du dossier contenant le script
 set "SCRIPT_DIR=%~dp0"
 
-REM Changer le rpertoire courant vers le script directory
+REM Changer le répertoire courant vers le script directory
 cd /d "!SCRIPT_DIR!"
 
 echo.
 echo ===============================
-echo 1. Vrification de l'installation de Python...
+echo 1. Vérification de l'installation de Python...
 echo ===============================
 echo.
 
-REM Vrifier si Python est install
+REM Vérifier si Python est installé
 python --version >nul 2>&1
 if "!errorlevel!" neq "0" (
     echo Installation de Python...
@@ -33,18 +33,18 @@ if "!errorlevel!" neq "0" (
         exit /b
     )
     echo.
-    echo = Python Install avec Succs
+    echo = Python Installé avec Succès
 ) else (
-    echo Python est dj install.
+    echo Python est déjà installé.
 )
 
 echo.
 echo ===============================
-echo 2. Vrification de l'installation de Node.js...
+echo 2. Vérification de l'installation de Node.js...
 echo ===============================
 echo.
 
-REM Vrifier si Node.js est install
+REM Vérifier si Node.js est installé
 node --version >nul 2>&1
 if "!errorlevel!" neq "0" (
     echo Installation de Node.js...
@@ -56,39 +56,75 @@ if "!errorlevel!" neq "0" (
         exit /b
     )
     echo.
-    echo = Node.js Install avec Succs
+    echo = Node.js Installé avec Succès
 ) else (
-    echo Node.js est dj install.
+    echo Node.js est déjà installé.
 )
 
 echo.
 echo ===============================
-echo 3. Cration de l'environnement virtuel...
+echo 3. Vérification de l'installation de Git... (non fonctionnel)
 echo ===============================
 echo.
 
-REM Crer l'environnement virtuel et rediriger les sorties vers un fichier log
-python -m venv venv > venv_creation.log 2>&1
+REM Vérifier si Git est installé
+git --version >nul 2>&1
+if "!errorlevel!" neq "0" (
+    echo Installation de Git...
+    REM cmd /c "!SCRIPT_DIR!!INSTALLER_DIR!\Git-2.47.0.2-64-bit.exe" /quiet
+    REM set "GIT_EXIT_CODE=!errorlevel!"
+    REM if "!GIT_EXIT_CODE!" neq "0" (
+    REM     echo Erreur lors de l'installation de Git.
+    REM     pause
+    REM     exit /b
+    REM )
+    echo.
+    echo = Git Installé avec Succès
+) else (
+    echo Git est déjà installé.
+)
+
+echo.
+echo ===============================
+echo 4. Clonage du dépôt GPODofus... (non fonctionnel)
+echo ===============================
+echo.
+
+REM Cloner le dépôt Git
+REM git clone https://github.com/AnthoB-Dev/GPODofus_prod GPODofus
+REM if "!errorlevel!" neq "0" (
+REM     echo Erreur lors du clonage du dépôt.
+REM     pause
+REM     exit /b
+REM )
+REM echo = Dépôt Cloné avec Succès
+
+echo.
+echo ===============================
+echo 5. Création de l'environnement virtuel...
+echo ===============================
+echo.
+
+REM Créer l'environnement virtuel
+python -m venv venv
 set "VENV_ERRORLEVEL=!errorlevel!"
 if "!VENV_ERRORLEVEL!" neq "0" (
-    echo Erreur lors de la cration de l'environnement virtuel.
-    echo Affichage du contenu de venv_creation.log:
-    type venv_creation.log
+    echo Erreur lors de la création de l'environnement virtuel.
     pause
     exit /b
 )
-echo = Environnement Virtuel Cr
+echo = Environnement Virtuel Créé
 
 echo.
 echo ===============================
-echo 4. Activation de l'environnement virtuel...
+echo 6. Activation de l'environnement virtuel...
 echo ===============================
 echo.
 
-REM Vrifier que activate.bat existe
+REM Vérifier que activate.bat existe
 if not exist "venv\Scripts\activate.bat" (
     echo Le fichier activate.bat est introuvable dans "venv\Scripts\".
-    echo Contenu du rpertoire Scripts :
+    echo Contenu du répertoire Scripts :
     dir /b "venv\Scripts\"
     pause
     exit /b
@@ -101,79 +137,79 @@ if "!errorlevel!" neq "0" (
     pause
     exit /b
 )
-echo = Environnement Virtuel Activ
+echo = Environnement Virtuel Activé
 
 echo.
 echo ===============================
-echo 5. Installation des dpendances Python...
+echo 7. Installation des dépendances Python...
 echo ===============================
 echo.
 
-REM Vrifier la prsence de requirements.txt
+REM Vérifier la présence de requirements.txt
 if not exist "requirements.txt" (
     echo Le fichier requirements.txt est introuvable dans "!SCRIPT_DIR!".
     pause
     exit /b
 )
 
-REM Installer les dpendances Python via pip avec chemin absolu
+REM Installer les dépendances Python via pip avec chemin absolu
 "venv\Scripts\pip.exe" install -r "requirements.txt"
 if "!errorlevel!" neq "0" (
-    echo Erreur lors de l'installation des dpendances Python.
+    echo Erreur lors de l'installation des dépendances Python.
     pause
     exit /b
 )
 echo ===============================
-echo = Dpendances Python Installes
+echo = Dépendances Python Installées
 echo ===============================
 
 echo.
 echo ===============================
-echo 6. Installation des dpendances npm...
+echo 8. Installation des dépendances npm...
 echo ===============================
 echo.
 
-REM Dfinir le rpertoire courant
+REM Définir le répertoire courant
 cd /d "!SCRIPT_DIR!"
 
-REM Vrifier la prsence de package.json
+REM Vérifier la présence de package.json
 if not exist "package.json" (
     echo Le fichier package.json est introuvable dans "!SCRIPT_DIR!".
     pause
     exit /b
 )
 
-REM Installer les dpendances npm
+REM Installer les dépendances npm
 call npm install
 set "NPM_EXIT_CODE=!errorlevel!"
 if "!NPM_EXIT_CODE!" gtr "1" (
-    echo Erreur lors de l'installation des dpendances npm.
+    echo Erreur lors de l'installation des dépendances npm.
     pause
     exit /b
 )
 echo ===============================
-echo = Dpendances npm Installes
+echo = Dépendances npm Installées
 echo ===============================
 
 echo.
 echo ===============================
-echo 7. Dsactivation de l'environnement virtuel...
+echo 9. Désactivation de l'environnement virtuel...
 echo ===============================
 echo.
 
-REM Dsactiver l'environnement virtuel
+REM Désactiver l'environnement virtuel
 call deactivate
 if "!errorlevel!" neq "0" (
-    echo Erreur lors de la dsactivation de l'environnement virtuel.
+    echo Erreur lors de la désactivation de l'environnement virtuel.
     pause
     exit /b
 )
 echo ===============================
-echo = Environnement Virtuel Dsactiv
+echo = Environnement Virtuel Désactivé
 echo ===============================
 
 echo.
 echo ==========================================
-echo = Installation termine. Vous pouvez fermer ce terminal.
+echo = Installation terminée. Vous pouvez fermer ce terminal.
 echo ==========================================
 pause >nul & exit
