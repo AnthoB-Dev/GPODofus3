@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<!-- Garder frame_main comme ID principal -->
+<turbo-frame id="frame_main">
+  <main>
+    <div id="topNav" class="js-close" data-turbo-permanent>
+      {%include "sections/nav.html"%}
+    </div>
+    <div id="centerContent">
+      <!-- Ces frames seront mis à jour lors de la navigation -->
+      <section id="guide">
+        {% include "sections/guide_explanations.html" %}
+      </section>
+      <section id="quests">
+        {% include "sections/quests.html" %}
+      </section>
+    </div>
+  </main>
+
+  <aside>
+    <section id="objectives">
+      {%include "sections/objectives.html"%}
+    </section>
+    <section id="achievements">
+      {%include "sections/achievements.html" %}
+    </section>
+  </aside>
+</turbo-frame>
+{% endblock %}

@@ -1,0 +1,37 @@
+<button 
+    id="pageNavLeft"
+    class="page-nav-button"
+    {% if previous_guide %}
+        data-url="{% url 'app:guide_detail' previous_guide.id %}"
+    {% else %}
+        disabled
+    {% endif %}
+    data-frame="frame_main"
+    data-action="replace"
+>
+    <i class="fa-solid fa-backward-step"></i>
+    {% if previous_guide %}
+        {{ previous_guide.title }}
+    {% else %}
+        Aucun guide précédent
+    {% endif %}
+</button>
+
+<button 
+    id="pageNavRight"
+    class="page-nav-button"
+    {% if next_guide %}
+        data-url="{% url 'app:guide_detail' next_guide.id %}"
+    {% else %}
+        disabled
+    {% endif %}
+    data-frame="frame_main"
+    data-action="replace"
+>
+    {% if next_guide %}
+        {{ next_guide.title }}
+    {% else %}
+        Aucun guide suivant
+    {% endif %}
+    <i class="fa-solid fa-forward-step"></i>
+</button>

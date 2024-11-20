@@ -1,0 +1,26 @@
+<turbo-frame id="quest_frame_{{ quest.id }}">
+  <li
+    class="js-quest{% if quest.completed %} isCompleted{% endif %}"
+    data-achievement-id="{% if selected_achievement %}{{ selected_achievement.id }}{% else %}{{ achievement.id }}{% endif %}">
+    <div>
+      <a href="{{ quest.url }}" target="_blank" aria-label="Se rendre sur la page Dofus pour les noobs de la quête {{ quest.title }}">
+        <i class="fa-solid fa-up-right-from-square"></i>
+      </a>
+    </div>
+    <p>{{ quest.title }}</p>
+    <form method="post" action="{% url 'app:toggle_quest_completion' quest.id %}">
+      {% csrf_token %}
+      <button
+        aria-label="Valider la quête {{ quest.title }}"
+        id="quest_{{ quest.id }}"
+        type="submit"
+        class="qButton {% if quest.completed %} uncheck {% else %} check {% endif %}">
+        {% if quest.completed %}
+          <i class="fa-solid fa-xmark"></i>
+        {% else %}
+          <i class="fa-solid fa-check"></i>
+        {% endif %}
+      </button>
+    </form>
+  </li>
+</turbo-frame>
