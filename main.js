@@ -73,7 +73,7 @@ function runDjangoProcess(pythonPath, djangoProjectPath) {
 
 function startDjango() {
   const appPath = app.isPackaged ? process.resourcesPath : app.getAppPath();
-  const pythonPath = path.join(appPath, 'python', 'python.exe');
+  const pythonPath = path.join(appPath, 'venv', 'Scripts', 'python.exe');
   const djangoProjectPath = appPath;
 
   if (!fs.existsSync(pythonPath)) {
