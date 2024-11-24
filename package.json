@@ -1,77 +1,27 @@
 {
-  "name": "gpodofus",
+  "name": "gpodofus3",
   "version": "0.8.0",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:renderer": "node esbuild.config.js",
-    "build": "npm run build:renderer && electron-builder"
+    "build": "npm run electron-builder"
   },
   "build": {
     "appId": "com.gpodofus.anthobdev",
-    "productName": "GPODofus",
-    "files": [
-      "main.js",
-      "preload.js",
-      "static/**/*",
-      "templates/**/*",
-      "node_modules/**/*",
-      "app/**/*",       
-      "backend/**/*", 
-      "db.sqlite3"
-    ],
-    "extraFiles": [
-      {
-        "from": "venv",
-        "to": "venv",
-        "filter": ["**/*"]
-      },
-      {
-        "from": "app",
-        "to": "app",
-        "filter": ["**/*"]
-      },
-      {
-        "from": "backend",
-        "to": "backend",
-        "filter": ["**/*"]
-      }
-    ],
-    "directories": {
-      "buildResources": "build"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "build/icons/favicon.ico"
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "build/icons/favicon.icns"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "build/icons/png/icon.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true
-    }
+    "productName": "GPODofus3"
   },
   "author": "AnthoB-Dev",
   "license": "MIT",
-  "description": "Guide de progression optimisée pour Dofus",
+  "description": "Guide de progression optimisée pour Dofus 3",
   "devDependencies": {
-    "electron": "^33.0.2",
+    "electron": "^33.2.0",
     "electron-builder": "^25.1.8",
-    "esbuild": "^0.24.0"
+    "electron-winstaller": "^5.4.0"
   },
   "dependencies": {
     "@hotwired/turbo": "^8.0.12",
-    "dotenv": "^16.4.5",
     "electron-log": "^5.2.2",
-    "electron-store": "^7.0.1",
     "electron-updater": "^6.3.9"
   }
 }

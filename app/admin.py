@@ -9,7 +9,6 @@ from .models import (
     DungeonQuest,
     Guide,
     GuideAchievement,
-    LastSession,
     Quest,
 )
 
@@ -71,10 +70,6 @@ class GuideAdmin(admin.ModelAdmin):
         "recommended_level",
     ]
     search_fields = ("title",)
-    
-
-class LastSessionAdmin(admin.ModelAdmin):
-    list_display = ["last_guide", "last_achievement"]
 
 
 class QuestAdmin(admin.ModelAdmin):
@@ -88,5 +83,4 @@ admin.site.register(Alignment, AlignmentAdmin)
 admin.site.register(Dungeon, DungeonAdmin)
 admin.site.register(CommonSpell)
 admin.site.register(Guide, GuideAdmin)
-admin.site.register(LastSession, LastSessionAdmin)
 admin.site.register(Quest, QuestAdmin)

@@ -1,12 +1,10 @@
-const { app, BrowserWindow, shell, ipcMain } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const Store = require('electron-store');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 
-const store = new Store();
 let mainWindow;
 let djangoProcess;
 
@@ -24,7 +22,7 @@ function createWindow() {
     maxWidth: 1600,
     maxHeight: 900,
     autoHideMenuBar: true,
-    icon: path.join(__dirname, '/staticfiles/medias/icons/favicon.ico'),
+    icon: path.join(__dirname, '/static/medias/icons/favicons/favicon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -107,9 +105,4 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
-});
-
-ipcMain.handle('save-last-achievement', (event, achievementId) => {
-  store.set('lastAchievement', achievementId);
-  return { status: 'success' };
 });

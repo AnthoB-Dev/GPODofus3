@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 GAME_VERSION = Decimal("2.73")
@@ -22,20 +23,16 @@ class Achievement(models.Model):
     title = models.CharField(max_length=255, verbose_name="titre")
     url = models.URLField(max_length=255)
     completion_points = models.IntegerField(verbose_name="Point de succès")
-    objectives = models.TextField(
-        max_length=255, null=True, blank=True, verbose_name="Objectifs"
-    )
-    expect_ressource = models.BooleanField(
-        default=False, verbose_name="Demande : Ressource"
-    )
+    objectives = models.TextField(max_length=255, null=True, blank=True, verbose_name="Objectifs")
+    expect_alignment = models.BooleanField(default=False, verbose_name="Demande : Alignement")
+    expect_capture = models.BooleanField(default=False, verbose_name="Demande : Capture")
+    expect_job = models.BooleanField(default=False, verbose_name="Demande : Métier")
+    expect_resource = models.BooleanField(default=False, verbose_name="Demande : Ressource")
     expect_item = models.BooleanField(default=False, verbose_name="Demande : Item")
     expect_fight = models.BooleanField(default=False, verbose_name="Demande : Combat")
     expect_dungeon = models.BooleanField(default=False, verbose_name="Demande : Donjon")
-    expect_job = models.BooleanField(default=False, verbose_name="Demande : Métier")
     expect_other = models.BooleanField(default=False, verbose_name="Demande : Autre")
-    expect_alignment = models.BooleanField(
-        default=False, verbose_name="Demande : Alignement"
-    )
+    
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Date de création"
     )
@@ -136,7 +133,7 @@ class CommonSpell(models.Model):
 
 class Guide(models.Model):
     title = models.CharField(max_length=255, verbose_name="Titre")
-    objectives = models.TextField("Objectifs", max_length=500)
+    objectives = models.TextField("Objectifs", null=True, blank=True)
     important_info = models.TextField("A prévoir", null=True, blank=True)
     explanations = models.TextField("Guide", null=True, blank=True)
     page = models.FloatField()
@@ -165,6 +162,7 @@ class Guide(models.Model):
     achievement = models.ManyToManyField(
         Achievement, through="GuideAchievement", related_name="guides"
     )
+    is_last_seen = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -173,13 +171,22 @@ class Guide(models.Model):
         ordering = ["id"]  # TODO: Changer l'ordre de tri par "page"
         verbose_name = "Guide"
         verbose_name_plural = "Guides"
+        
+    def save(self, *args, **kwargs):
+        if self.is_last_seen:
+            # Mettre is_last_seen à False pour tous les autres guides
+            Guide.objects.filter(is_last_seen=True).exclude(pk=self.pk).update(is_last_seen=False)
+        super().save(*args, **kwargs)
 
 
 class GuideAchievement(models.Model):
-    guide = models.ForeignKey(Guide, on_delete=models.CASCADE, verbose_name="Guide")
-    achievement = models.ForeignKey(
-        Achievement, on_delete=models.CASCADE, verbose_name="Succès"
+    guide = models.ForeignKey(
+        Guide, on_delete=models.CASCADE, verbose_name="Guide", related_name="guide_achievements"
     )
+    achievement = models.ForeignKey(
+        Achievement, on_delete=models.CASCADE, verbose_name="Succès", related_name="achievement_guides"
+    )
+    is_last_seen = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("guide", "achievement")
@@ -189,6 +196,19 @@ class GuideAchievement(models.Model):
 
     def __str__(self):
         return f"{self.guide.title} - {self.achievement.title}"
+
+    def clean(self):
+        if self.is_last_seen:
+            if GuideAchievement.objects.filter(
+                guide=self.guide, is_last_seen=True
+            ).exclude(id=self.id).exists():
+                raise ValidationError(
+                    "Un seul achievement peut être marqué comme vu en dernier par guide."
+                )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
 
 class Dungeon(models.Model):
@@ -232,18 +252,6 @@ class DungeonQuest(models.Model):
 
     def __str__(self):
         return f"{self.dungeon.name} - {self.quest.title}"
-
-
-class LastSession(models.Model):
-    last_guide = models.ForeignKey("Guide", on_delete=models.SET_NULL, null=True)
-    last_achievement = models.ForeignKey('Achievement', on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return f"Last guide: {self.last_guide}, Last achievement: {self.last_achievement}"
-
-    class Meta:
-        verbose_name = "Dernière session"
-        verbose_name_plural = "Dernières sessions"
 
 
 class Quest(models.Model):

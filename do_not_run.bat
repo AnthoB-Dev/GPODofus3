@@ -63,53 +63,17 @@ if "!errorlevel!" neq "0" (
 
 echo.
 echo ===============================
-echo 3. Vérification de l'installation de Git... (non fonctionnel)
+echo 3. Création de l'environnement virtuel...
 echo ===============================
 echo.
 
-REM Vérifier si Git est installé
-git --version >nul 2>&1
-if "!errorlevel!" neq "0" (
-    echo Installation de Git...
-    REM cmd /c "!SCRIPT_DIR!!INSTALLER_DIR!\Git-2.47.0.2-64-bit.exe" /quiet
-    REM set "GIT_EXIT_CODE=!errorlevel!"
-    REM if "!GIT_EXIT_CODE!" neq "0" (
-    REM     echo Erreur lors de l'installation de Git.
-    REM     pause
-    REM     exit /b
-    REM )
-    echo.
-    echo = Git Installé avec Succès
-) else (
-    echo Git est déjà installé.
-)
-
-echo.
-echo ===============================
-echo 4. Clonage du dépôt GPODofus... (non fonctionnel)
-echo ===============================
-echo.
-
-REM Cloner le dépôt Git
-REM git clone https://github.com/AnthoB-Dev/GPODofus_prod GPODofus
-REM if "!errorlevel!" neq "0" (
-REM     echo Erreur lors du clonage du dépôt.
-REM     pause
-REM     exit /b
-REM )
-REM echo = Dépôt Cloné avec Succès
-
-echo.
-echo ===============================
-echo 5. Création de l'environnement virtuel...
-echo ===============================
-echo.
-
-REM Créer l'environnement virtuel
-python -m venv venv
+REM Créer l'environnement virtuel et rediriger les sorties vers un fichier log
+python -m venv venv > venv_creation.log 2>&1
 set "VENV_ERRORLEVEL=!errorlevel!"
 if "!VENV_ERRORLEVEL!" neq "0" (
     echo Erreur lors de la création de l'environnement virtuel.
+    echo Affichage du contenu de venv_creation.log:
+    type venv_creation.log
     pause
     exit /b
 )
@@ -117,7 +81,7 @@ echo = Environnement Virtuel Créé
 
 echo.
 echo ===============================
-echo 6. Activation de l'environnement virtuel...
+echo 4. Activation de l'environnement virtuel...
 echo ===============================
 echo.
 
@@ -141,7 +105,7 @@ echo = Environnement Virtuel Activé
 
 echo.
 echo ===============================
-echo 7. Installation des dépendances Python...
+echo 5. Installation des dépendances Python...
 echo ===============================
 echo.
 
@@ -165,7 +129,7 @@ echo ===============================
 
 echo.
 echo ===============================
-echo 8. Installation des dépendances npm...
+echo 6. Installation des dépendances npm...
 echo ===============================
 echo.
 
@@ -193,7 +157,7 @@ echo ===============================
 
 echo.
 echo ===============================
-echo 9. Désactivation de l'environnement virtuel...
+echo 7. Désactivation de l'environnement virtuel...
 echo ===============================
 echo.
 
