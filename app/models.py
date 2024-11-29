@@ -21,7 +21,7 @@ class Achievement(models.Model):
     """
 
     title = models.CharField(max_length=255, verbose_name="titre")
-    url = models.URLField(max_length=255)
+    url = models.URLField(max_length=255, null=True, blank=True)
     completion_points = models.IntegerField(verbose_name="Point de succès")
     objectives = models.TextField(max_length=255, null=True, blank=True, verbose_name="Objectifs")
     expect_alignment = models.BooleanField(default=False, verbose_name="Demande : Alignement")
@@ -134,7 +134,7 @@ class CommonSpell(models.Model):
 class Guide(models.Model):
     title = models.CharField(max_length=255, verbose_name="Titre")
     objectives = models.TextField("Objectifs", null=True, blank=True)
-    important_info = models.TextField("A prévoir", null=True, blank=True)
+    important_info = models.TextField("Informations importantes", null=True, blank=True)
     explanations = models.TextField("Guide", null=True, blank=True)
     page = models.FloatField()
     recommended_level = models.IntegerField(verbose_name="Niveau recommandé")
@@ -168,7 +168,7 @@ class Guide(models.Model):
         return self.title
 
     class Meta:
-        ordering = ["id"]  # TODO: Changer l'ordre de tri par "page"
+        ordering = ["page"]
         verbose_name = "Guide"
         verbose_name_plural = "Guides"
         
@@ -254,6 +254,13 @@ class DungeonQuest(models.Model):
         return f"{self.dungeon.name} - {self.quest.title}"
 
 
+class User(models.Model):
+    alignment = models.ForeignKey("Alignment", on_delete=models.CASCADE, default=1)
+    
+    def __str__(self):
+        return f"Alignement choisi : {self.alignment.name}"
+
+
 class Quest(models.Model):
     """
     Représente une quête du jeu.
@@ -307,6 +314,6 @@ class Quest(models.Model):
         return self.title
 
     class Meta:
-        ordering = ["title"]
+        ordering = ["id"]
         verbose_name = "Quête"
         verbose_name_plural = "Quêtes"

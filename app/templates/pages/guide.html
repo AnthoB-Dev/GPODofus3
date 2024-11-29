@@ -1,7 +1,6 @@
 {% extends "base.html" %} {% load static %} {% block content %}
-<!-- Garder frame_main comme ID principal -->
 <turbo-frame id="frame_main">
-  <main>
+  <main data-guide={{guide.id}}>
     <div id="topNav" class="js-close" data-turbo-permanent>
       {%include "sections/nav.html"%}
     </div>

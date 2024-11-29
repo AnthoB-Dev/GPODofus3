@@ -26,10 +26,11 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = "django-insecure-_c487q-rf*ar-326bj#$zp@ss1q28s56=!^=ylg9p56%jobgmc"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "localhost",
+    "127.0.0.1",
 ]
 
 # Application definition
@@ -43,14 +44,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "compressor",
-    "fontawesomefree",
     "debug_toolbar",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    # "whitenoise.middleware.WhiteNoiseMiddleware",  
-    # "django.middleware.gzip.GZipMiddleware",       
+    "whitenoise.middleware.WhiteNoiseMiddleware",  
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -138,54 +137,36 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     "compressor.finders.CompressorFinder",
 ]
-STATICFILES_IGNORE_PATTERNS = [
-    "*.map",
-]
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # URL du serveur React
-]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Django Compressor
-
-COMPRESS_ENABLED = False
-COMPRESS_OFFLINE = False
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
 COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_URL = STATIC_URL
+COMPRESS_STORAGE = 'compressor.storage.CompressorFileStorage'
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
 
-# Configuration GZip
-GZIP_MINIMUM_SIZE = 1024  # 1 Ko
-GZIP_CONTENT_TYPES = (
-    'text/plain',
-    'text/css',
-    'application/json',
-    'application/javascript',
-    'text/html',
-    'application/xml',
-    'text/javascript',
-)
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'django_debug.log'),
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'django_debug.log'),
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

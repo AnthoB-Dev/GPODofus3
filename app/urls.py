@@ -4,8 +4,8 @@ from . import views
 app_name = "app"  # Namespace de l'application
 
 urlpatterns = [
-    path("guide/", views.guide_detail, name="guide"),
-    path("guide/<int:guide_id>/", views.guide_detail, name="guide_detail"),
+    path("guide/", views.GuideDetailView.as_view(), name="guide"),
+    path("guide/<int:guide_id>/", views.GuideDetailView.as_view(), name="guide_detail"),
     path(
         "guide/<int:guide_id>/achievements/",
         views.guide_achievements_partial,
@@ -27,4 +27,5 @@ urlpatterns = [
         name="guide_quests_achievement",
     ),
     path('toggle-quest/<int:quest_id>/', views.toggle_quest_completion, name='toggle_quest_completion'),
+    path('alignment/', views.alignment_choice, name='alignment_choice'),
 ]

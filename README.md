@@ -8,6 +8,7 @@
 **GPODofus3** (*GPOD3 pour les intimes*) a été développé dans le but **d'apporter** ce qui, à mon humble avis et avec toute la **subjectivité** que cela implique, **manque** au guide du -presque- même nom de [Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548).
 
 **N'hésitez pas** à mettre une **étoile** sur [le Github du projet](https://github.com/AnthoB-Dev/GPODofus3) si vous **appréciez** l'application, ou simplement si l'**initiative** vous interesse.
+J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de qualité de vie, d'optimisations structurelles de l'application, et bien plus !
 
 
 ## Sommaire
@@ -72,9 +73,9 @@ Mais avec la sortie de **Dofus 3** je me suis dit que ça allait changer. C'est 
 
 ### Les défauts qui m'ont inspirés 
 
-1. En tant que nooblar complet du **questing**, j'ai vite vu les inconvénients en terme de **présentation** du format **spreadsheet** alors même qu'on peut facilement s'apercevoir du travail de **Skyzio** sur ce point là (entre autre).
+1. En tant que nooblar complet du **questing**, j'ai vite vu les inconvénients en terme de **présentation** du format **spreadsheet**... Un paradoxe entre trop d'infos et pas assez.
 
-2. Le **second** inconvénients à mon sens est de n'avoir **que du visuel** finalement, à part la possibilité de copier (et encore dans la douleur de spreadsheet) les noms des succès, pour ensuite le coller dans DPLN, je trouve que ça **manque de liens**, et **d'interactibilité**.
+2. Le **second** inconvénients à mon sens est de n'avoir **que du visuel** finalement, à part la possibilité de copier les noms des succès, et dans la douleur de spreadsheet (vous l'aurez compris je n'aime pas les spreadsheets), pour ensuite le coller dans DPLN, je trouve que ça **manque de liens**, et **d'interactibilité**.
 
 3. Et enfin : le **manque de guidance** ! Je sais que c'est le but **recherché** par Skyzio qui souhaite laisser aux lecteurs de son guide le **choix** de prendre leurs propres **décisions**, et je le respecte. J'en partage la philosophie. 
 Malgré tout, peut être que des gens passeront **à côté** de ce très bon guide à cause du **manque de guidance** ? 
@@ -100,7 +101,8 @@ Comme dit précedemment, j'ai essayer de faire en sorte d'apporter ce qu'il peut
 
 - **Une section Succès avec** :
 
-    - **Un repère visuel pour connaitre les prérequis d'un succès** : Concrètement j'ai incorporé la section **à prévoir** de [DPLN](https://www.dofuspourlesnoobs.com), exemple : "Ce qu'il vous faudra prévoir" dans la [quête de l'emeraude](https://www.dofuspourlesnoobs.com/dofus-emeraude.html). Il y a des petites icones dans la section **Succès** permettant d'un coup de d'oeil de savoir qu'il y aura un prérequis pour completer le succès ! Plus qu'à cliquer sur le lien du succès et [DPLN](https://www.dofuspourlesnoobs.com) vous donnera les détails.
+    - **Un repère visuel pour connaitre les prérequis d'un succès** : Concrètement j'ai incorporé la section **à prévoir** de [DPLN](https://www.dofuspourlesnoobs.com), exemple : "Ce qu'il vous faudra prévoir" dans la [quête de l'emeraude](https://www.dofuspourlesnoobs.com/dofus-emeraude.html). 
+J'ai ajouté des petites icônes dans la section **Succès** permettant d'un coup d'oeil de savoir qu'il y aura un prérequis et quel(s) prérequis pour completer le succès ! Plus qu'à cliquer sur le lien du succès et [DPLN](https://www.dofuspourlesnoobs.com) vous donnera les détails.
 
     - **Deux autres repères visuel pour connaitre l'avancée du succès d'un coup d'oeil** : 
         - Une **bordure** entoure les succès lors de la complétion de quêtes selon un **code couleur** simple : 
@@ -113,13 +115,14 @@ Comme dit précedemment, j'ai essayer de faire en sorte d'apporter ce qu'il peut
 
 ### Ce que ça n'apporte pas
 
-- **Un guide de pro de Dofus** : Non comme je le disais dans ma présentation, je ne suis qu'un joueur cazu du jeu. C'est pour cela que j'ai besoin du [guide de Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548).
+- **Un guide de pro de Dofus** : Comme on pu noté ceux ayant jeter un oeil à ma présentation, je ne suis qu'un joueur cazu du jeu. J'ai des connaissances, dans certaines tranches de niveaux plus que d'autres, mais en ce qui concerne les quêtes je vais faire confiance au [guide de Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548). 
+C'est pour ça que cette application se base sur son travail ! Merci Skyzio !
 
 - **Une application parfaite** : J'ai une formation **web developpeur** mais je ne travail malheureusement pas dans le milieu. Je **manque d'experiences** et c'est la première fois que j'utilise la plupart des techs utilisées dans cette application (**Django, Electron**). 
 Même **Python** n'est pas mon langage de croisière ! 
-Mais j'ai quand même fait en sorte au meilleur de mes compétences, de **réduire** l'impact de mon application sur la **mémoire**. Il faudra compter entre **100 et 200 mo de mémoire** disponible, ce qui est 2x moins que ce que me prend mon discord à l'heure où je rédige ces mots.
+Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **réduire** l'impact de mon application sur la **mémoire**. Il faudra compter entre **100 et 200 mo de mémoire** disponible, ce qui est 2x moins que ce que me prend mon discord à l'heure où je rédige ces mots, En idle.
 
-- **La simplicité de l'utilisation d'un spreadsheet** : Malgré ce que j'en dis, dans un spreadsheet il suffira de faire un CTRL + F et de chercher dans la page pour facilement trouver l'information recherchée.
+- **La simplicité de l'utilisation d'un spreadsheet** : Malgré ce que j'en dis, dans un spreadsheet il suffit de faire un CTRL + F et de chercher dans la page pour facilement trouver l'information recherchée.
 
 - **Tout ce qu'un bon dev aurait pu ajouté, et tout ce que je n'ai pas encore ajouté**.
 

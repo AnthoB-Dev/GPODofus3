@@ -9,6 +9,7 @@ from .models import (
     DungeonQuest,
     Guide,
     GuideAchievement,
+    User,
     Quest,
 )
 
@@ -66,10 +67,15 @@ class GuideAdmin(admin.ModelAdmin):
     inlines = [GuideAchievementInline, DungeonGuideInline]
     list_display = [
         "title",
+        "page",
         "id",
         "recommended_level",
     ]
     search_fields = ("title",)
+
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ["id", "alignment"]
 
 
 class QuestAdmin(admin.ModelAdmin):
@@ -83,4 +89,5 @@ admin.site.register(Alignment, AlignmentAdmin)
 admin.site.register(Dungeon, DungeonAdmin)
 admin.site.register(CommonSpell)
 admin.site.register(Guide, GuideAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(Quest, QuestAdmin)

@@ -26,7 +26,7 @@
         {% if item.expect_list %}
         <span class="expectIcons">
           {% for expect in item.expect_list %}
-            <img src="{% static 'medias/icons/expect/' %}{{ expect }}.png" alt="" />
+            <img src="{% static 'medias/icons/expect/' %}{{ expect }}.png" alt="Icone {{expect}}" />
           {% endfor %}
         {% endif %}
       </a>
