@@ -1,7 +1,7 @@
 {% load static %}
 <turbo-frame id="achievement_frame_{{ item.achievement.id }}">
   <li
-    class="js-achievement borders-{% if item.completion_percentage == 100 %}green{% elif item.completion_percentage >= 50 %}orange{% elif item.completion_percentage > 0 %}red{% endif %}{% if last_seen_achievement == item.achievement.id %} active{% endif %}"
+    class="js-achievement borders-{% if item.completion_percentage == 100 %}green{% elif item.completion_percentage >= 50 %}orange{% elif item.completion_percentage > 0 %}red{% endif %}{% if last_seen_achievement == item.achievement %} active{% endif %}"
     data-achievement-id="{{ item.achievement.id }}">
     <div>
       <a

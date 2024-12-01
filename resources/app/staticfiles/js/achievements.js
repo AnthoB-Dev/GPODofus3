@@ -1,28 +1,26 @@
 /**
  * Met en surbrillance le succès cliqué.
  */
-export const handleAchievementButtonClick = (button, achievements) => {
-    return () => {
-        achievements.forEach((e) => {
-            e.classList.remove("active");
-        });
-        button.parentElement.parentElement.classList.add("active");
-    };
-}
-
-export const addAchievementEventListeners = async () => {
-    const buttons = document.querySelectorAll(".achievement-button");
+export const handleAchievementButtonClick = async (event) => {
+    const button = event.currentTarget;
     const achievements = await getAchievements();
+    achievements.forEach((achievement) => {
+        achievement.classList.remove("active");
+    });
+    button.parentElement.parentElement.classList.add("active");
+};
+
+export const addAchievementBtnClickEventListeners = async () => {
+    const buttons = document.querySelectorAll(".achievement-button");
     buttons.forEach((button) => {
-        button.addEventListener("click", handleAchievementButtonClick(button, achievements));
+        button.addEventListener("click", handleAchievementButtonClick);
     });
 };
 
-export const removeAchievementEventListeners = async () => {
+export const removeAchievementBtnClickEventListeners = async () => {
     const buttons = document.querySelectorAll(".achievement-button");
-    const achievements = await getAchievements();
     buttons.forEach((button) => {
-        button.removeEventListener("click", handleAchievementButtonClick(button, achievements));
+        button.removeEventListener("click", handleAchievementButtonClick);
     });
 };
 

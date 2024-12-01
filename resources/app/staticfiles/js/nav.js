@@ -16,7 +16,6 @@ export const updateTopNavTitle = (event = null) => {
         if (currentTitle) {
             currentTitle.textContent = newTitle;
         }
-        updateSelectedGuide();
     }
 };
 

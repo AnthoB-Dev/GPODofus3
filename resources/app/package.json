@@ -1,6 +1,6 @@
 {
   "name": "gpodofus3",
-  "version": "0.8.1",
+  "version": "0.9.1",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -9,7 +9,7 @@
     "make": "electron-forge make"
   },
   "build": {
-    "appId": "com.gpodofus.anthobdev",
+    "appId": "com.GPODofus3.anthobdev",
     "productName": "GPODofus3"
   },
   "author": "AnthoB-Dev",
@@ -27,8 +27,10 @@
     "electron": "^33.2.1"
   },
   "dependencies": {
+    "@hotwired/turbo": "^8.0.12",
     "electron-log": "^5.2.2",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-winstaller": "^5.4.0",
     "tree-kill": "^1.2.2"
   }
 }

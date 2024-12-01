@@ -13,7 +13,6 @@ from .utils import (
     generate_expect_list,
     get_selected_achievement,
     calculate_completion_percentage,
-    get_last_seen_achievement_id
 )
 
 ADMIN = False # DEBUG
@@ -69,7 +68,7 @@ class GuideDetailView(View):
             achievement = ga.achievement
             quests = get_filtered_quests(achievement, ADMIN, alignment_ids, admin_ids)
             if ga.is_last_seen:
-                last_seen_achievement = achievement.id
+                last_seen_achievement = achievement
 
             completion_percentage = calculate_completion_percentage(achievement, user_alignment, guide)
             expect_list = generate_expect_list(achievement, user_alignment_name)
@@ -179,7 +178,6 @@ def toggle_quest_completion(request, quest_id):
     completion_percentage = calculate_completion_percentage(achievement, user_alignment, guide)
 
     last_seen_achievement = get_selected_achievement(guide_achievements, guide)
-    last_seen_achievement_id = get_last_seen_achievement_id(guide_achievements, achievement)
 
     expect_list = generate_expect_list(achievement, User.objects.first().alignment.name)
 
@@ -191,7 +189,6 @@ def toggle_quest_completion(request, quest_id):
         'guide': guide,
         'selected_achievement': selected_achievement,
         'last_seen_achievement': last_seen_achievement,       
-        'last_seen_achievement_id': last_seen_achievement_id 
     }, request=request)
     
     achievement_html = render_to_string('sections/_achievement_item.html', {
@@ -204,7 +201,6 @@ def toggle_quest_completion(request, quest_id):
         'guide': guide,
         'selected_achievement': selected_achievement,
         'last_seen_achievement': last_seen_achievement,   
-        'last_seen_achievement_id': last_seen_achievement_id 
     }, request=request)
 
     response_content = f"""

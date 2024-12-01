@@ -84,9 +84,3 @@ def calculate_completion_percentage(achievement, user_alignment, guide):
     completed_quests_count = quests.filter(completed=True).count()
     
     return int((completed_quests_count / total_quests_count * 100)) if total_quests_count > 0 else 0
-
-def get_last_seen_achievement_id(guide_achievements, current_achievement):
-    for ga in guide_achievements:
-        if ga.is_last_seen:
-            return ga.achievement.id
-    return guide_achievements.first().achievement.id if guide_achievements.exists() else None

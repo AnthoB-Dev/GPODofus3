@@ -1,4 +1,4 @@
-import { handleAchievementButtonClick, getAchievements } from "./achievements.js";
+import { getAchievements } from "./achievements.js";
 
 
 const openLinksOfQuests = async () => {
@@ -154,7 +154,6 @@ const clickValidateAll = async () => {
     }
 
     let tglCompletionBtns = getButtons();
-    const achievements = Array.from(await getAchievements());
 
     if (!Array.isArray(tglCompletionBtns)) {
         tglCompletionBtns = Array.from(tglCompletionBtns);
@@ -163,8 +162,6 @@ const clickValidateAll = async () => {
     for (const button of tglCompletionBtns) {
         await toggleBtn(button);
     }
-
-    handleAchievementButtonClick(tglCompletionBtns[0], achievements);
 
     if (validateAll) {
         validateAll.disabled = false; 
