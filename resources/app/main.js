@@ -9,9 +9,101 @@
 
   let mainWindow;
   let djangoProcess;
-  let pythonPath;
+  let globalPythonPath;
   let stdOn = false; // Définir sur false pour désactiver la sortie standard
   let stdio;
+
+  log.info(`Arguments de lancement : ${process.argv.join(' ')}`);
+
+  const handleSquirrelEvent = async () => {
+    if (process.argv.length > 1) {
+      const squirrelEvent = process.argv[1];
+      log.info(`Événement Squirrel détecté : ${squirrelEvent}`);
+  
+      const path = require('path');
+      const childProcess = require('child_process');
+  
+      const appFolder = path.resolve(process.execPath, '..');
+      const rootFolder = path.resolve(appFolder, '..');
+      const updateExe = path.resolve(path.join(rootFolder, 'Update.exe'));
+      const exeName = path.basename(process.execPath);
+  
+      const spawnUpdate = function(args) {
+        let spawnedProcess;
+        try {
+          spawnedProcess = childProcess.spawn(updateExe, args, {detached: true});
+        } catch (error) {
+          log.error(`Erreur lors de l'exécution de Update.exe avec les arguments ${args}:`, error);
+        }
+        return spawnedProcess;
+      };
+
+      if (squirrelEvent === '--squirrel-firstrun') {
+        log.info("Gestion de l'événement --squirrel-firstrun");
+        app.quit();
+        return true; // Ajouter ce return pour empêcher l'exécution du reste du code
+      }
+  
+      if (squirrelEvent === '--squirrel-install' || squirrelEvent === '--squirrel-updated') {
+        // Création des raccourcis
+        spawnUpdate(['--createShortcut', exeName]);
+  
+        // Attendre un court instant pour s'assurer que les raccourcis sont créés
+        setTimeout(async () => {
+          try {
+            await runInstaller();
+            log.info("Installation terminée.");
+            app.quit();
+          } catch (error) {
+            log.error(`Erreur lors de l'installation : ${error}`);
+            dialog.showErrorBox(
+              "Erreur",
+              "Erreur lors de l'installation."
+            );
+            app.quit();
+          }
+        }, 3000);
+        return true;
+      }
+  
+      if (squirrelEvent === '--squirrel-uninstall') {
+        // Suppression des raccourcis
+        spawnUpdate(['--removeShortcut', exeName]);
+      
+        // Suppression des dossiers spécifiques
+        try {
+          // Chemin vers AppData\Local\GPODofus3
+          const localAppDataPath = path.join(process.env.LOCALAPPDATA, 'GPODofus3');
+          if (fs.existsSync(localAppDataPath)) {
+            fs.rmSync(localAppDataPath, { recursive: true, force: true });
+            log.info(`Dossier supprimé : ${localAppDataPath}`);
+          } else {
+            log.info(`Le dossier n'existe pas : ${localAppDataPath}`);
+          }
+      
+          // Chemin vers AppData\Roaming\gpodofus3
+          const appDataPath = path.join(process.env.APPDATA, 'gpodofus3');
+          if (fs.existsSync(appDataPath)) {
+            fs.rmSync(appDataPath, { recursive: true, force: true });
+            log.info(`Dossier supprimé : ${appDataPath}`);
+          } else {
+            log.info(`Le dossier n'existe pas : ${appDataPath}`);
+          }
+        } catch (error) {
+          log.error(`Erreur lors de la suppression des dossiers : ${error}`);
+        }
+      
+        app.quit();
+        return true;
+      }
+  
+      if (squirrelEvent === '--squirrel-obsolete') {
+        app.quit();
+        return true;
+      }
+    }
+    return false;
+  };
 
   const executeCommand = (command, args) => {
     return new Promise((resolve, reject) => {
@@ -67,7 +159,7 @@
 
   // Fonction pour sélectionner le meilleur Python (>= 3.13)
   /**
-   * @returns {Promise<string>} pythonPath
+   * @returns {Promise<string>} globalPythonPath (chemin global)
    */
   const selectPythonPath = async () => {
     const pythonPaths = await findAllPythonPaths();
@@ -85,8 +177,8 @@
           log.info(
             `__ Python approprié trouvé : (Version ${version.major}.${version.minor}.${version.patch})`
           );
-          pythonPath = pyPath;
-          return pythonPath;
+          globalPythonPath = pyPath;
+          return globalPythonPath;
         } else {
           log.warn(
             `__ Python non approprié trouvé : (Version ${
@@ -107,14 +199,27 @@
     // Si aucun Python approprié n'est trouvé
     dialog.showErrorBox(
       "Erreur de version de Python",
-      "Aucune version de Python 3.13 ou supérieure n'a été trouvée. Veuillez installer Python 3.13 ou une version ultérieure avant d'utiliser cette application. https://www.python.org/downloads/release/python-3130/"
+      "Aucune version de Python 3.13 ou supérieure n'a été trouvée. Veuillez installer Python 3.13 ou une version ultérieure avant d'utiliser cette application. Ouverture de la page de téléchargement de Python..."
     );
+    link = "https://www.python.org/downloads/release/python-3130/";
+    setTimeout(() => {
+      shell.openExternal(link);
+    }, 3000);
     app.quit();
   };
 
+  const getVenvPath = () => {
+    return path.join(__dirname, "../../venv");
+  }
+
   // Fonction pour créer le virtual environment (venv)
-  const createVenv = async (pythonPath) => {
-    const venvPath = path.join(__dirname, "../../venv");
+  /**
+   * 
+   * @param {globalPythonPath} globalPythonPath 
+   * @returns {Promise<string>} venvPath
+   */
+  const createVenv = async (globalPythonPath) => {
+    const venvPath = getVenvPath();
     log.info(`Chemin du virtual environment : ${venvPath}`);
 
     if (fs.existsSync(venvPath)) {
@@ -124,7 +229,7 @@
 
     try {
       log.info("Création du virtual environment...");
-      await executeCommand(`"${pythonPath}"`, ["-m", "venv", venvPath]);
+      await executeCommand(`"${globalPythonPath}"`, ["-m", "venv", venvPath]);
       log.info("Virtual environment créé avec succès.");
       return venvPath;
     } catch (error) {
@@ -135,7 +240,6 @@
       );
       app.quit();
     }
-    return venvPath;
   };
 
   const getPipPath = async (venvPath) => {
@@ -255,26 +359,25 @@
         );
         dialog.showErrorBox(
           "Erreur",
-          `Erreur lors de l'installation des dépendances : ${error.message}`
+          `Erreur lors de l'installation des dépendances : ${error.message}. Réessayez de lancer l'installateur en tant qu'administrateur.`
         );
         app.quit();
       }
     }
   };
 
-  // Fonction pour vérifier et configurer l'environnement
-  const setupEnvironment = async () => {
+  const getVenvPythonPath = (venvPath) => {
+    return path.join(venvPath, "Scripts", "python.exe");
+  }
+
+  const runInstaller = async () => {
     try {
-      pythonPath = await selectPythonPath();
-      const venvPath = await createVenv(pythonPath);
-      await installDependencies(venvPath);
-      pythonPath = path.join(venvPath, "Scripts", "python.exe");
-      return pythonPath;
+      globalPythonPath = await selectPythonPath();
+      await createVenv(globalPythonPath);
+      await installDependencies(getVenvPath());
+      log.info("Environnement configuré avec succès.");
     } catch (error) {
-      console.warn(
-        "Erreur lors de la configuration de l'environnement :",
-        error
-      );
+      log.error("Erreur lors de la configuration de l'environnement :", error);
       dialog.showErrorBox(
         "Erreur",
         "Erreur lors de la configuration de l'environnement."
@@ -283,294 +386,198 @@
     }
   };
 
-  // Fonction pour gérer les événements Squirrel
-  const handleSquirrelEvent = () => {
-    log.info(`process.argv: ${process.argv.join(" ")}`);
+  // Appeler la fonction pour gérer les événements Squirrel
+  if (await handleSquirrelEvent()) {
+    // L'événement Squirrel a été traité, on arrête l'exécution
+    return;
+  }
 
-    if (process.argv.length === 1) {
-      log.info("Aucun argument Squirrel détecté.");
-      return false;
+  // Fonction pour exécuter le processus Django
+  const runDjangoProcess = (pythonPath, djangoProjectPath) => {
+    const managePyPath = path.join(djangoProjectPath, "manage.py");
+
+    log.info("- Lancement du processus Django.");
+    log.info(`Chemin Python utilisé : ${pythonPath}`);
+    log.info(`Chemin manage.py utilisé : ${managePyPath}`);
+
+    stdOn ? (stdio = "pipe") : (stdio = "ignore");
+
+    const django = spawn(pythonPath, ["manage.py", "runserver"], {
+      cwd: djangoProjectPath,
+      shell: false,
+      stdio: stdio,
+    });
+
+    log.info("Django process spawned.");
+
+    if (stdOn) {
+      // Capture de la sortie standard
+      django.stdout.on("data", (data) => {
+        log.info(`Django stdout : ${data}`);
+      });
+
+      // Capture de la sortie d'erreur
+      django.stderr.on("data", (data) => {
+        log.error(`Django stderr : ${data}`);
+      });
     }
 
-    const squirrelEvent = process.argv[1];
-    log.info(`Événement Squirrel détecté: ${squirrelEvent}`);
-
-    return new Promise((resolve, reject) => {
-      const ChildProcess = require("child_process");
-      const appFolder = path.resolve(process.execPath, "..");
-      const rootAtomFolder = path.resolve(appFolder, "..");
-      const updateDotExe = path.resolve(
-        path.join(rootAtomFolder, "Update.exe")
+    django.on("error", (err) => {
+      log.error("Échec du démarrage du processus Django :", err);
+      dialog.showErrorBox(
+        "Erreur",
+        "Échec du démarrage du serveur Django."
       );
-      const exeName = path.basename(process.execPath);
+      app.quit();
+    });
 
-      const spawn = (command, args) => {
-        try {
-          ChildProcess.spawn(command, args, { detached: true });
-          log.info(`Spawned ${command} with args: ${args.join(" ")}`);
-        } catch (error) {
-          log.error(`Erreur lors du spawn de ${command}: ${error}`);
-          reject(error);
-        }
-      };
+    django.on("exit", (code) => {
+      if (code !== 0) {
+        log.error(`Le processus Django s'est terminé avec le code ${code}`);
+        dialog.showErrorBox(
+          "Erreur",
+          `Le serveur Django s'est arrêté avec le code ${code}.`
+        );
+      }
+      log.info("Processus Django terminé.");
+      app.quit();
+    });
 
-      const spawnUpdate = (args) => {
-        spawn(updateDotExe, args);
-      };
+    return django;
+  };
 
-      switch (squirrelEvent) {
-        case "--squirrel-install":
-          log.info("Traitement de l'événement --squirrel-install");
-          spawnUpdate(["--createShortcut", exeName]);
+  // Fonction pour démarrer Django
+  const startDjango = async () => {
+    log.info("- Démarrage de Django. Début du processus.");
+    pythonPath = getVenvPythonPath(getVenvPath());
+    log.info(`__Python_path : ${pythonPath}`);
 
-          setupEnvironment()
-            .then(() => {
-              setTimeout(() => {
-                app.quit();
-                resolve(true);
-              }, 1000);
-            })
-            .catch((error) => {
+    try {
+      const djangoProjectPath = path.join(__dirname);
+      log.info(`__Django_project_path : ${djangoProjectPath}`);
+      djangoProcess = runDjangoProcess(pythonPath, djangoProjectPath);
+      log.info("Processus Django démarré avec le PID :", djangoProcess.pid);
+    } catch (error) {
+      log.error("Erreur lors du démarrage du processus Django :", error);
+      dialog.showErrorBox(
+        "Erreur",
+        "Erreur lors du démarrage du serveur Django."
+      );
+      app.quit();
+    }
+  };
+
+  // Fonction pour arrêter Django
+  const killDjangoProcess = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        if (djangoProcess && !djangoProcess.killed) {
+          log.info("Arrêt du processus Django.");
+          kill(djangoProcess.pid, "SIGTERM", (err) => {
+            if (err) {
               log.error(
-                `Erreur lors de la configuration de l'environnement: ${error}`
+                "Erreur lors de l'arrêt du processus Django :",
+                err
               );
-              dialog.showErrorBox(
-                "Erreur",
-                "Erreur lors de la configuration de l'environnement."
-              );
-              app.quit();
-              resolve(false);
-            });
-          return; // Terminer après traitement
-        case "--squirrel-updated":
-          log.info("Traitement de l'événement --squirrel-updated");
-          spawnUpdate(["--createShortcut", exeName]);
-          // Ajoutez ici des actions post-mise à jour si nécessaire
-          setTimeout(() => {
-            app.quit();
-            resolve(true);
-          }, 1000);
-          return; // Terminer après traitement
-
-        case "--squirrel-obsolete":
-          log.info("Traitement de l'événement --squirrel-obsolete");
-          app.quit();
-          resolve(true);
-          return; // Terminer après traitement
-
-        default:
-          log.warn(`Événement Squirrel inconnu: ${squirrelEvent}`);
-          resolve(false);
-          return; // Terminer après traitement
+              reject(err);
+            } else {
+              log.info("Processus Django arrêté avec succès.");
+              resolve();
+            }
+          });
+        } else {
+          log.info("Aucun processus Django actif à arrêter.");
+          resolve();
+        }
+      } catch (error) {
+        log.error("Erreur lors de l'arrêt du processus Django :", error);
+        reject(error);
       }
     });
   };
 
-  // Appeler la fonction pour gérer les événements Squirrel
-  if (await handleSquirrelEvent()) {
-    log.info(
-      "Un événement Squirrel a été détecté et traité. L'exécution normale est interrompue."
-    );
-    // Un événement Squirrel a été détecté et traité
-    // Ne pas continuer l'exécution normale
-    return;
-  }
+  // Fonction pour créer la fenêtre principale
+  const createWindow = () => {
+    log.info("- Création de la fenêtre principale.");
 
-  const gotTheLock = app.requestSingleInstanceLock();
-
-  if (!gotTheLock) {
-    app.quit();
-  } else {
-    app.on("second-instance", () => {
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.focus();
-      }
-
-      // Fonction pour exécuter le processus Django
-      const runDjangoProcess = (pythonPath, djangoProjectPath) => {
-        const managePyPath = path.join(djangoProjectPath, "manage.py");
-
-        log.info("- Lancement du processus Django.");
-        log.info(`Chemin Python utilisé : ${pythonPath}`);
-        log.info(`Chemin manage.py utilisé : ${managePyPath}`);
-
-        stdOn ? (stdio = "pipe") : (stdio = "ignore");
-
-        const django = spawn(pythonPath, ["manage.py", "runserver"], {
-          cwd: djangoProjectPath,
-          shell: false,
-          stdio: stdio,
-        });
-
-        log.info("Django process spawned.");
-
-        if (stdOn) {
-          // Capture de la sortie standard
-          django.stdout.on("data", (data) => {
-            log.info(`Django stdout : ${data}`);
-          });
-
-          // Capture de la sortie d'erreur
-          django.stderr.on("data", (data) => {
-            log.error(`Django stderr : ${data}`);
-          });
-        }
-
-        django.on("error", (err) => {
-          log.error("Échec du démarrage du processus Django :", err);
-          dialog.showErrorBox(
-            "Erreur",
-            "Échec du démarrage du serveur Django."
-          );
-          app.quit();
-        });
-
-        django.on("exit", (code) => {
-          if (code !== 0) {
-            log.error(`Le processus Django s'est terminé avec le code ${code}`);
-            dialog.showErrorBox(
-              "Erreur",
-              `Le serveur Django s'est arrêté avec le code ${code}.`
-            );
-          }
-          log.info("Processus Django terminé.");
-          app.quit();
-        });
-
-        return django;
-      };
-
-      // Fonction pour démarrer Django
-      const startDjango = async () => {
-        log.info("- Démarrage de Django. Début du processus.");
-        pythonPath = await setupEnvironment();
-        try {
-          const djangoProjectPath = path.join(__dirname);
-          log.info(`__Django_project_path : ${djangoProjectPath}`);
-          djangoProcess = runDjangoProcess(pythonPath, djangoProjectPath);
-          log.info("Processus Django démarré avec le PID :", djangoProcess.pid);
-        } catch (error) {
-          log.error("Erreur lors du démarrage du processus Django :", error);
-          dialog.showErrorBox(
-            "Erreur",
-            "Erreur lors du démarrage du serveur Django."
-          );
-          app.quit();
-        }
-      };
-
-      // Fonction pour arrêter Django
-      const killDjangoProcess = () => {
-        return new Promise((resolve, reject) => {
-          try {
-            if (djangoProcess && !djangoProcess.killed) {
-              log.info("Arrêt du processus Django.");
-              kill(djangoProcess.pid, "SIGTERM", (err) => {
-                if (err) {
-                  log.error(
-                    "Erreur lors de l'arrêt du processus Django :",
-                    err
-                  );
-                  reject(err);
-                } else {
-                  log.info("Processus Django arrêté avec succès.");
-                  resolve();
-                }
-              });
-            } else {
-              log.info("Aucun processus Django actif à arrêter.");
-            }
-          } catch (error) {
-            log.error("Erreur lors de l'arrêt du processus Django :", error);
-          }
-        });
-      };
-
-      // Fonction pour créer la fenêtre principale
-      const createWindow = () => {
-        log.info("- Création de la fenêtre principale.");
-
-        mainWindow = new BrowserWindow({
-          width: 1366,
-          height: 768,
-          resizable: true,
-          minWidth: 1280,
-          minHeight: 720,
-          maxWidth: 1600,
-          maxHeight: 900,
-          autoHideMenuBar: true,
-          icon: path.join(__dirname, "app.ico"),
-          webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
-            nodeIntegration: false,
-            contextIsolation: true,
-            enableRemoteModule: false,
-            sandbox: true,
-          },
-        });
-
-        mainWindow.loadURL("http://localhost:8000/");
-
-        mainWindow.on("close", () => {
-          log.info("- Fermeture de la fenêtre principale.");
-          mainWindow = null;
-        });
-
-        mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-          shell.openExternal(url);
-          return { action: "deny" };
-        });
-
-        // Supprimer complètement le menu
-        mainWindow.setMenu(null);
-
-        log.info("Fenêtre principale créée. Fin du processus.");
-      };
-
-      // Gérer les événements de l'application
-      app.whenReady().then(async () => {
-        await startDjango();
-        createWindow();
-
-        app.on("activate", () => {
-          log.info("app.on_activate : Application activée.");
-          if (BrowserWindow.getAllWindows().length === 0) createWindow();
-        });
-      });
-
-      app.on("window-all-closed", () => {
-        log.info(
-          "app.on_window-all-closed : Toutes les fenêtres sont fermées."
-        );
-        if (process.platform !== "darwin") {
-          app.quit();
-        }
-      });
-
-      app.on("before-quit", async () => {
-        log.info(
-          "app.on_before-quit : Tentative de fermeture de l'application, arrêt du processus Django."
-        );
-        await killDjangoProcess();
-      });
-
-      app.on("quit", async () => {
-        log.info("app.on_quit : L'application s'est fermée.");
-      });
-
-      // Gestion des signaux de terminaison
-      process.on("SIGINT", async () => {
-        log.info("SIGINT reçu, fermeture de l'application.");
-        await killDjangoProcess();
-        app.quit();
-      });
-
-      process.on("SIGTERM", async () => {
-        log.info("SIGTERM reçu, fermeture de l'application.");
-        await killDjangoProcess();
-        app.quit();
-      });
+    mainWindow = new BrowserWindow({
+      width: 1366,
+      height: 768,
+      resizable: true,
+      minWidth: 1280,
+      minHeight: 720,
+      maxWidth: 1600,
+      maxHeight: 900,
+      autoHideMenuBar: true,
+      icon: path.join(__dirname, "app.ico"),
+      webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+        nodeIntegration: false,
+        contextIsolation: true,
+        enableRemoteModule: false,
+        sandbox: true,
+      },
     });
-  }
+
+    mainWindow.loadURL("http://localhost:8000/");
+
+    mainWindow.on("close", () => {
+      log.info("- Fermeture de la fenêtre principale.");
+      mainWindow = null;
+    });
+
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url);
+      return { action: "deny" };
+    });
+
+    // Supprimer complètement le menu
+    mainWindow.setMenu(null);
+
+    log.info("Fenêtre principale créée. Fin du processus.");
+  };
+
+  // Gérer les événements de l'application
+  app.whenReady().then(async () => {
+    await startDjango();
+    createWindow();
+
+    app.on("activate", () => {
+      log.info("app.on_activate : Application activée.");
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  });
+
+  app.on("window-all-closed", () => {
+    log.info(
+      "app.on_window-all-closed : Toutes les fenêtres sont fermées."
+    );
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
+  });
+
+  app.on("before-quit", async () => {
+    log.info(
+      "app.on_before-quit : Tentative de fermeture de l'application, arrêt du processus Django."
+    );
+    await killDjangoProcess();
+  });
+
+  app.on("quit", async () => {
+    log.info("app.on_quit : L'application s'est fermée.");
+  });
+
+  // Gestion des signaux de terminaison
+  process.on("SIGINT", async () => {
+    log.info("SIGINT reçu, fermeture de l'application.");
+    await killDjangoProcess();
+    app.quit();
+  });
+
+  process.on("SIGTERM", async () => {
+    log.info("SIGTERM reçu, fermeture de l'application.");
+    await killDjangoProcess();
+    app.quit();
+  });
 })();
