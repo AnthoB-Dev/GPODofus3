@@ -8,7 +8,7 @@ module.exports = {
     asar: false,
     icon: path.join(
       __dirname,
-      "static",
+      "staticfiles",
       "medias",
       "icons",
       "favicons",
@@ -26,7 +26,7 @@ module.exports = {
         description: "Guide de progression optimisée pour Dofus 3",
         setupIcon: path.join(
           __dirname,
-          "static",
+          "staticfiles",
           "medias",
           "icons",
           "favicons",
@@ -35,7 +35,7 @@ module.exports = {
         noMsi: true,
         iconUrl: path.join(
           __dirname,
-          "static",
+          "staticfiles",
           "medias",
           "icons",
           "favicons",

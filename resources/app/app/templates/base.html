@@ -2,23 +2,25 @@
 <html lang="fr">
   <head>
     {% load static %} {% load compress %}
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="GPODofus est une application qui a pour but de guider la progression du joueur 'Dofus'. Il est basé sur le très bon google spreadsheet de Skyzio : 'Guide de Progression Optimisée'. 'Dofus' est un jeu développé par Ankama Games.">
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none';">
-    <link rel="icon" href="{% static 'medias/icons/favicons/icon.ico' %}" type="image/x-icon" />
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'medias/icons/favicons/favicon.ico' %}" type="image/x-icon" />
+    
     {% compress css %}
       <link rel="stylesheet" type="text/less" href="{% static 'css/styles.less' %}" />
     {% endcompress %}
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="{% static 'js/turbo.es2017-umd.js' %}" defer></script>
     <script src="{% static 'js/app.js' %}" type="module" defer></script>
+
     <title>Guide de progression optimisée</title>
   </head>
   <body id="theme-emeraude">
-    <img id="backgroundImage" src="{% static 'medias/backgrounds/background.webp' %}" alt="" data-turbo-permanent
+    <img id="backgroundImage" src="{% static 'medias/backgrounds/background.webp' %}" alt="Image de fond de l'application" data-turbo-permanent
     srcset="
       {% static 'medias/backgrounds/background_299x171.webp' %} 299w, 
       {% static 'medias/backgrounds/background_1060x606.webp' %} 1060w, 
