@@ -1,7 +1,7 @@
 # Guide de progression optimisée: Dofus 3
 
 <!-- TODO: Changer l'image par une version finale -->
-![Image du projet](/static/medias/project.png)
+![Image du projet](resources/app/static/medias/project.png)
 
 ## Bonjour et bienvenu sur GPODofus3.
 
