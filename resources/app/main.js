@@ -12,16 +12,14 @@
   let globalPythonPath;
   let stdOn = false; // Définir sur false pour désactiver la sortie standard
   let stdio;
+  const installationMarker = path.join(app.getPath('userData'), '.installation_complete');
 
   log.info(`Arguments de lancement : ${process.argv.join(' ')}`);
 
   const handleSquirrelEvent = async () => {
     if (process.argv.length > 1) {
       const squirrelEvent = process.argv[1];
-      log.info(`Événement Squirrel détecté : ${squirrelEvent}`);
-  
-      const path = require('path');
-      const childProcess = require('child_process');
+      log.info(`Événement Squirrel détecté : ${squirrelEvent}`);
   
       const appFolder = path.resolve(process.execPath, '..');
       const rootFolder = path.resolve(appFolder, '..');
@@ -31,7 +29,10 @@
       const spawnUpdate = function(args) {
         let spawnedProcess;
         try {
-          spawnedProcess = childProcess.spawn(updateExe, args, {detached: true});
+          spawnedProcess = spawn(updateExe, args, { detached: true });
+          spawnedProcess.on('close', (code) => {
+            log.info(`Update.exe terminé avec le code ${code}`);
+          });
         } catch (error) {
           log.error(`Erreur lors de l'exécution de Update.exe avec les arguments ${args}:`, error);
         }
@@ -39,60 +40,90 @@
       };
 
       if (squirrelEvent === '--squirrel-firstrun') {
-        log.info("Gestion de l'événement --squirrel-firstrun");
-        app.quit();
-        return true; // Ajouter ce return pour empêcher l'exécution du reste du code
+        log.info("Événement --squirrel-firstrun détecté.");
+      
+      
+        if (!fs.existsSync(installationMarker)) {
+          log.info("Installation incomplète lors du premier lancement, attente de l'installation.");
+          // Attendre ou exécuter à nouveau l'installation si nécessaire
+          await runInstaller();
+        }
+      
+        // Laisser l'application continuer à démarrer normalement
+        return false;
       }
   
       if (squirrelEvent === '--squirrel-install' || squirrelEvent === '--squirrel-updated') {
         // Création des raccourcis
         spawnUpdate(['--createShortcut', exeName]);
-  
-        // Attendre un court instant pour s'assurer que les raccourcis sont créés
-        setTimeout(async () => {
-          try {
-            await runInstaller();
-            log.info("Installation terminée.");
-            app.quit();
-          } catch (error) {
-            log.error(`Erreur lors de l'installation : ${error}`);
-            dialog.showErrorBox(
-              "Erreur",
-              "Erreur lors de l'installation."
-            );
-            app.quit();
-          }
-        }, 3000);
+      
+        try {
+          log.info("Démarrage de l'installation...");
+          await runInstaller();
+          log.info("Installation terminée.");
+      
+          // Redémarrer manuellement l'application après l'installation
+          const spawnOptions = {
+            detached: true,
+            stdio: 'ignore'
+          };
+          const child = spawn(process.execPath, [], spawnOptions);
+          child.unref();
+      
+        } catch (error) {
+          log.error(`Erreur lors de l'installation : ${error.message}`);
+          dialog.showErrorBox(
+            "Erreur",
+            `Erreur lors de l'installation : ${error.message}`
+          );
+        } finally {
+          app.quit();
+        }
         return true;
       }
   
       if (squirrelEvent === '--squirrel-uninstall') {
         // Suppression des raccourcis
         spawnUpdate(['--removeShortcut', exeName]);
-      
-        // Suppression des dossiers spécifiques
+  
+        // Suppression des dossiers spécifiques avec réessai
         try {
+          // Fonction de réessai
+          const deletePathWithRetry = (targetPath, retries = 3, delay = 1000) => {
+            return new Promise((resolve, reject) => {
+              const attemptDelete = (currentAttempt) => {
+                if (!fs.existsSync(targetPath)) {
+                  log.info(`Le dossier n'existe pas : ${targetPath}`);
+                  return resolve();
+                }
+                try {
+                  fs.rmSync(targetPath, { recursive: true, force: true });
+                  log.info(`Dossier supprimé : ${targetPath}`);
+                  resolve();
+                } catch (error) {
+                  if (currentAttempt < retries) {
+                    log.warn(`Tentative ${currentAttempt + 1} échouée pour supprimer ${targetPath}. Nouvelle tentative dans ${delay}ms.`);
+                    setTimeout(() => attemptDelete(currentAttempt + 1), delay);
+                  } else {
+                    reject(error);
+                  }
+                }
+              };
+              attemptDelete(0);
+            });
+          };
+  
           // Chemin vers AppData\Local\GPODofus3
           const localAppDataPath = path.join(process.env.LOCALAPPDATA, 'GPODofus3');
-          if (fs.existsSync(localAppDataPath)) {
-            fs.rmSync(localAppDataPath, { recursive: true, force: true });
-            log.info(`Dossier supprimé : ${localAppDataPath}`);
-          } else {
-            log.info(`Le dossier n'existe pas : ${localAppDataPath}`);
-          }
-      
-          // Chemin vers AppData\Roaming\gpodofus3
-          const appDataPath = path.join(process.env.APPDATA, 'gpodofus3');
-          if (fs.existsSync(appDataPath)) {
-            fs.rmSync(appDataPath, { recursive: true, force: true });
-            log.info(`Dossier supprimé : ${appDataPath}`);
-          } else {
-            log.info(`Le dossier n'existe pas : ${appDataPath}`);
-          }
+          // Chemin vers AppData\Roaming\GPODofus3
+          const appDataPath = path.join(process.env.APPDATA, 'GPODofus3');
+  
+          await deletePathWithRetry(localAppDataPath);
+          await deletePathWithRetry(appDataPath);
         } catch (error) {
           log.error(`Erreur lors de la suppression des dossiers : ${error}`);
         }
-      
+  
         app.quit();
         return true;
       }
@@ -110,21 +141,33 @@
       const proc = spawn(command, args, { shell: true });
       let stdout = "";
       let stderr = "";
-
+  
       proc.stdout.on("data", (data) => {
-        stdout += data.toString();
+        const output = data.toString();
+        stdout += output;
+        log.info(`stdout: ${output}`);
       });
-
+  
       proc.stderr.on("data", (data) => {
-        stderr += data.toString();
+        const errorOutput = data.toString();
+        stderr += errorOutput;
+        log.error(`stderr: ${errorOutput}`);
       });
-
+  
       proc.on("close", (code) => {
+        log.info(`Processus terminé avec le code ${code}`);
         if (code === 0) {
           resolve(stdout.trim());
         } else {
-          reject(new Error(stderr.trim()));
+          const errorMessage = `Commande "${command} ${args.join(' ')}" échouée avec le code ${code}`;
+          log.error(errorMessage);
+          reject(new Error(stderr.trim() || errorMessage));
         }
+      });
+  
+      proc.on("error", (err) => {
+        log.error(`Erreur lors de l'exécution de la commande : ${err.message}`);
+        reject(err);
       });
     });
   };
@@ -212,9 +255,8 @@
     return path.join(__dirname, "../../venv");
   }
 
-  // Fonction pour créer le virtual environment (venv)
   /**
-   * 
+   * Fonction pour créer le virtual environment (venv)
    * @param {globalPythonPath} globalPythonPath 
    * @returns {Promise<string>} venvPath
    */
@@ -318,28 +360,37 @@
   // Fonction pour installer les dépendances du venv
   const installDependencies = async (venvPath) => {
     let pipPath = path.join(venvPath, "Scripts", "pip.exe");
-
+  
     log.info(`Vérification de pip à : ${pipPath}`);
-
+  
     if (!fs.existsSync(pipPath)) {
       log.error(`pip.exe introuvable dans le venv à : ${pipPath}`);
       log.info("Installation de pip dans le virtual environment...");
-
-      pipPath = await getPipPath(venvPath);
-
-      // Vérifier si pip a été installé correctement
-      if (fs.existsSync(pipPath)) {
-        log.info(`pip trouvé à : ${pipPath}`);
-      } else {
-        log.error(`pip.exe n'a pas pu être trouvé dans le venv à : ${pipPath}`);
+  
+      try {
+        pipPath = await getPipPath(venvPath);
+        log.info(`pip installé à : ${pipPath}`);
+      } catch (error) {
+        log.error(`Erreur lors de l'installation de pip : ${error.message}`);
+        dialog.showErrorBox(
+          "Erreur",
+          `Erreur lors de l'installation de pip : ${error.message}`
+        );
+        app.quit();
+        return;
+      }
+  
+      if (!fs.existsSync(pipPath)) {
+        log.error(`pip.exe n'a pas pu être trouvé après installation à : ${pipPath}`);
         dialog.showErrorBox(
           "Erreur",
           `pip.exe n'a pas pu être trouvé dans le virtual environment à : ${pipPath}`
         );
         app.quit();
+        return;
       }
     }
-
+  
     const dependenciesInstalled = await areDependenciesInstalled(pipPath);
     if (dependenciesInstalled) {
       log.info("Toutes les dépendances sont déjà installées.");
@@ -347,8 +398,10 @@
     } else {
       try {
         log.info("Installation des dépendances avec pip...");
-        await executeCommand(`"${pipPath}"`, [
+        log.info(`Commande exécutée : "${pipPath}" install --no-cache-dir -r ${path.join(__dirname, "requirements.txt")}`);
+        await executeCommand(pipPath, [
           "install",
+          "--no-cache-dir",
           "-r",
           path.join(__dirname, "requirements.txt"),
         ]);
@@ -357,6 +410,7 @@
         log.error(
           `Erreur lors de l'installation des dépendances : ${error.message}`
         );
+        log.error(`Détails de l'erreur : ${error.stack}`);
         dialog.showErrorBox(
           "Erreur",
           `Erreur lors de l'installation des dépendances : ${error.message}. Réessayez de lancer l'installateur en tant qu'administrateur.`
@@ -371,6 +425,7 @@
   }
 
   const runInstaller = async () => {
+    
     try {
       globalPythonPath = await selectPythonPath();
       await createVenv(globalPythonPath);
@@ -509,7 +564,14 @@
       maxWidth: 1600,
       maxHeight: 900,
       autoHideMenuBar: true,
-      icon: path.join(__dirname, "app.ico"),
+      icon: path.join(
+        __dirname,
+        "staticfiles",
+        "medias",
+        "icons",
+        "favicons",
+        "icon.ico"
+      ),
       webPreferences: {
         preload: path.join(__dirname, "preload.js"),
         nodeIntegration: false,

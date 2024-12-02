@@ -153,9 +153,9 @@ const handlePageNavButtonClick = (e) => {
     }
 };
 
-let shiftPressed = false;
-let ctrlPressed = false;
-let altPressed = false;
+let shiftActivated = false;
+let ctrlActivated = false;
+let altActivated = false;
 
 const handleKeys = async (e) => {
     const pageNavLeft = document.querySelector('#pageNavLeft');
@@ -167,6 +167,7 @@ const handleKeys = async (e) => {
     const achievements = await getAchievements();
     const activeAchievement = [...achievements].find(achievement => achievement.classList.contains("active"));
     const guideScrollable = document.querySelector('#guide .content');
+    const achievementsScrollable = document.querySelector('#achievements .content');
     const guideTitle= document.querySelector('#guide h3');
     const achievementTitle = document.querySelector('#achievements h3');
 
@@ -175,55 +176,59 @@ const handleKeys = async (e) => {
     // Mettre à jour l'état des touches modificateurs
     if (e.type === 'keydown') {
         if (e.key === 'Shift') {
-            if (!shiftPressed) {
-                shiftPressed = true;
+            if (!shiftActivated) {
+                shiftActivated = true;
                 achievementTitle.classList.add('keyboardFocusedElement');
                 guideTitle.classList.remove('keyboardFocusedElement');
                 topNav.classList.contains("js-open") ? toggleDropdown() : null;
-                ctrlPressed = false;
+                ctrlActivated = false;
             } else {
-                shiftPressed = false;
+                shiftActivated = false;
                 achievementTitle.classList.remove('keyboardFocusedElement');
             }
         } 
         if (e.key === 'Control') {
-            if (!ctrlPressed) {
-                ctrlPressed = true;
+            if (!ctrlActivated) {
+                ctrlActivated = true;
                 guideTitle.classList.add('keyboardFocusedElement');
                 achievementTitle.classList.remove('keyboardFocusedElement');
                 topNav.classList.contains("js-open") ? toggleDropdown() : null;
-                shiftPressed = false;
+                shiftActivated = false;
             } else {
-                ctrlPressed = false;
+                ctrlActivated = false;
                 guideTitle.classList.remove('keyboardFocusedElement');
             }
         };
         if (e.key === 'Tab') {
             e.preventDefault();
-            if (ctrlPressed || shiftPressed) {
-                ctrlPressed = false;
-                shiftPressed = false
+            if (ctrlActivated || shiftActivated) {
+                ctrlActivated = false;
+                shiftActivated = false
             }
         };
-        if (e.key === 'Alt') altPressed = true;
+        if (e.key === 'Alt') altActivated = true;
     } else if (e.type === 'keyup') {
-        if (e.key === 'Alt') altPressed = false;
+        if (e.key === 'Alt') altActivated = false;
     }
 
-    const notCtrl = !ctrlPressed && shiftPressed;
-    const notShift = ctrlPressed && !shiftPressed;
-    const neitherCtrlNorShift = !ctrlPressed && !shiftPressed;
+    const shiftIsActivated = !ctrlActivated && shiftActivated;
+    const ctrlIsActivated = ctrlActivated && !shiftActivated;
+    const nothingActivated = !ctrlActivated && !shiftActivated;
 
     const arrowDown = e.type === 'keydown' && e.key === 'ArrowDown';
     const arrowUp = e.type === 'keydown' && e.key === 'ArrowUp';
     const arrowLeft = e.type === 'keydown' && e.key === 'ArrowLeft';
     const arrowRight = e.type === 'keydown' && e.key === 'ArrowRight';
+    const enterKey = e.key === 'Enter';
+    const escapeKey = e.key === 'Escape';
+    const oKey = e.key === 'o';
+    const vKey = e.key === 'v';
 
-    if (neitherCtrlNorShift && arrowLeft) {
+    if (nothingActivated && arrowLeft) {
         pageNavLeft.click();
-    } else if (neitherCtrlNorShift && arrowRight) {
+    } else if (nothingActivated && arrowRight) {
         pageNavRight.click();
-    } else if (neitherCtrlNorShift && arrowDown) {
+    } else if (nothingActivated && arrowDown) {
         if (!topNav.classList.contains('js-open')) {
             toggleDropdown();
         } else {
@@ -233,7 +238,7 @@ const handleKeys = async (e) => {
                 selected.nextElementSibling?.scrollIntoView({ block: 'nearest' });
             }
         }
-    } else if (neitherCtrlNorShift && arrowUp) {
+    } else if (nothingActivated && arrowUp) {
         if (topNav.classList.contains('js-open')) {
             if (selected.previousElementSibling) {
                 selected.previousElementSibling.classList.add('selected');
@@ -243,25 +248,31 @@ const handleKeys = async (e) => {
                 toggleDropdown();
             }
         }
-    } else if (notCtrl && arrowDown) {
+    } else if (shiftIsActivated && arrowDown) {
+        if (achievementsScrollable) {
+            achievementsScrollable.scrollBy({ top: 30, behavior: 'smooth' });
+        }
         activeAchievement.parentElement.nextElementSibling?.querySelector('.achievementName a').click();
-    } else if (notCtrl && arrowUp) {
+    } else if (shiftIsActivated && arrowUp) {
+        if (achievementsScrollable) {
+            achievementsScrollable.scrollBy({ top: -30, behavior: 'smooth' });
+        }
         activeAchievement.parentElement.previousElementSibling?.querySelector('.achievementName a').click();
-    } else if (neitherCtrlNorShift && e.key === 'Enter' && topNav.classList.contains('js-open')) {
+    } else if (nothingActivated && enterKey && topNav.classList.contains('js-open')) {
         selected.click();
-    } else if (e.key === 'Escape' && topNav.classList.contains('js-open')) {
+    } else if (escapeKey && topNav.classList.contains('js-open')) {
         if (topNav.classList.contains('js-open')) {
             toggleDropdown();
         }
-    } else if (neitherCtrlNorShift && e.key === 'o') {
+    } else if (nothingActivated && oKey) {
         openAllbtn.click();
-    } else if (neitherCtrlNorShift && e.key === 'v') {
+    } else if (nothingActivated && vKey) {
         validateAllBtn.click();
-    } else if (notShift && arrowDown) {
+    } else if (ctrlIsActivated && arrowDown) {
         if (guideScrollable) {
             guideScrollable.scrollBy({ top: 250, behavior: 'smooth' });
         }
-    } else if (notShift && arrowUp) {
+    } else if (shiftIsActivated && arrowUp) {
         if (guideScrollable) {
             guideScrollable.scrollBy({ top: -250, behavior: 'smooth' });
         }

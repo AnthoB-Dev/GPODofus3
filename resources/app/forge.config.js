@@ -41,6 +41,7 @@ module.exports = {
           "favicons",
           "icon.ico"
         ),
+        oneClick: false
       },
     },
     {
