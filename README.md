@@ -11,7 +11,6 @@
 J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de qualité de vie, d'optimisations structurelles de l'application, et bien plus !
 
 - **<span style="color:red;">LIRE ATTENTIVEMENT LA SECTION INSTALLATION SVP.</span>**
-- **<span style="color:red;">Version 1.0 pour demain matin.</span>**
 - **<span style="color:red;">Ne supporte que Windows.</span>**
 
 ## Sommaire
