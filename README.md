@@ -1,6 +1,6 @@
 # Guide de progression optimisée: Dofus 3
 
-![Image du projet](https://github.com/AnthoB-Dev/GPODofus3/blob/main/static/medias/project.png)
+![Image du projet](https://github.com/AnthoB-Dev/GPODofus3/blob/main/staticfiles/medias/project.png)
 
 ## Bonjour et bienvenu sur GPODofus3.
 
