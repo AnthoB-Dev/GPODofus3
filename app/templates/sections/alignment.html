@@ -1,0 +1,16 @@
+<form method="post" action="{% url 'app:alignment_choice' %}" id="alignment_form" data-turbo="false">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="alignment_select">Choix : </label>
+        <select class="form-control" id="alignment_select" name="alignment">
+            {% for alignment in alignments %}
+                {% if alignment.name != "Aligner" %}
+                <option value="{{ alignment.id }}" {% if alignment.id == current_alignment_id %}selected{% endif %}>
+                    {{ alignment.name }}
+                </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="hidden">Changer l'Alignement</button>
+</form>

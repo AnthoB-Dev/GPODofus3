@@ -1,0 +1,19 @@
+{% load static %}
+<div class="guide-header">
+  <div class="imgBackground">
+    <img src="{% static 'medias/icons/book.png' %}" alt="book icon" />
+  </div>
+  <h2>{{guide.title}}</h2>
+  <i class="fa-solid fa-caret-down caretClose"></i>
+</div>
+<turbo-frame id="navigation-dropdown" class="dropdown-content hidden" loading="lazy">
+  <div class="overflow overflowClose">
+    {% for guide in guides %}
+    <div class="guide-item" data-guide-id="{{guide.id}}" data-url="{% url 'app:guide_detail' guide.id %}">
+      Nv.{{ guide.recommended_level }} -
+      {{ guide.title }}
+    </div>
+    {% endfor %}
+  </div>
+</turbo-frame>
+
