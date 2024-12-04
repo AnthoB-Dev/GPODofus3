@@ -134,7 +134,7 @@ Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **rédu
 **<span style="color:red;">LIRE ATTENTIVEMENT CETTE SECTION SVP</span>**
 
 ### Téléchargement
-Disponible soit
+Disponible soit :
     - À droite de cette page section **Release** latest.
     - Dans la section [Release](https://github.com/AnthoB-Dev/GPODofus3/tags), cliquez sur la dernière version (**1.0.X**).
 
