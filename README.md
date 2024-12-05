@@ -123,7 +123,7 @@ C'est pour ça que cette application se base sur son travail ! Merci Skyzio !
 
 - **Une application parfaite** : J'ai une formation **web developpeur** mais je ne travail malheureusement pas dans le milieu. Je **manque d'experiences** et c'est la première fois que j'utilise la plupart des techs utilisées dans cette application (**Django, Electron**). 
 Même **Python** n'est pas mon langage de croisière ! 
-Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **réduire** l'impact de mon application sur la **mémoire**. Il faudra compter entre **100 et 200 mo de mémoire** disponible, ce qui est 2x moins que ce que me prend mon discord à l'heure où je rédige ces mots, En idle.
+Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **réduire** l'impact de mon application sur la **mémoire**. Il faudra compter environ **50mo de mémoire** disponible en idle (mon Discord prends 200mo au moment où j'écris).
 
 - **La simplicité de l'utilisation d'un spreadsheet** : Malgré ce que j'en dis, dans un spreadsheet il suffit de faire un CTRL + F et de chercher dans la page pour facilement trouver l'information recherchée.
 
