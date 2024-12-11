@@ -10,8 +10,10 @@
 **N'hésitez pas** à mettre une **étoile** sur [le Github du projet](https://github.com/AnthoB-Dev/GPODofus3) si vous **appréciez** l'application, ou simplement si l'**initiative** vous interesse.
 J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de qualité de vie, d'optimisations structurelles de l'application, et bien plus !
 
+- Le guide de Skyzio 3.0 corrige certain aspects qui étaient manquant jusqu'alors comme les liens, et de meilleur explications. Je vais continuer d'améliorer l'application pour ajouter une plus value suffisante mais pour l'heure je recommande l'utilisation de son spreadsheet. Ceci dit, je vous invite quand même à tester l'application qui est à jour jusqu'aux alentours du niveau 60 et me donner votre avis sur celle-ci.
 - **<span style="color:red;">LIRE ATTENTIVEMENT LA SECTION INSTALLATION SVP.</span>**
-- **<span style="color:red;">Ne supporte que Windows.</span>**
+- **<span style="color:red;">Ne supporte que Windows pour le moment.</span>**
+
 
 ## Sommaire
 <ul>
