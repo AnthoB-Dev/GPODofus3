@@ -1,12 +1,13 @@
 {
   "name": "GPODofus3",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "build": {
     "appId": "com.GPODofus3.anthobdev",
@@ -23,6 +24,7 @@
     "@electron-forge/maker-zip": "^7.6.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.6.0",
     "@electron-forge/plugin-fuses": "^7.6.0",
+    "@electron-forge/publisher-github": "^7.6.0",
     "@electron/fuses": "^1.8.0",
     "electron": "^33.2.1"
   },
@@ -30,6 +32,7 @@
     "@hotwired/turbo": "^8.0.12",
     "electron-log": "^5.2.2",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-updater": "^6.3.9",
     "electron-winstaller": "^5.4.0",
     "rimraf": "^6.0.1",
     "tree-kill": "^1.2.2"

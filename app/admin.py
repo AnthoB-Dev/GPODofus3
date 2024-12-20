@@ -18,6 +18,10 @@ class AchievementQuestInline(admin.TabularInline):
     model = AchievementQuest
     extra = 1
 
+class AchievementGuideInline(admin.TabularInline):
+    model = GuideAchievement
+    extra = 1
+
 
 class DungeonQuestInline(admin.TabularInline):
     model = DungeonQuest
@@ -50,7 +54,7 @@ class AchievementAdmin(admin.ModelAdmin):
     )
     list_filter = ("completion_points", "created_in_version", "updated_at")
     search_fields = ("title",)
-    inlines = [AchievementQuestInline]
+    inlines = [AchievementQuestInline, AchievementGuideInline]
 
 
 class AlignmentAdmin(admin.ModelAdmin):
@@ -70,6 +74,7 @@ class GuideAdmin(admin.ModelAdmin):
         "page",
         "id",
         "recommended_level",
+        "is_visible",
     ]
     search_fields = ("title",)
 

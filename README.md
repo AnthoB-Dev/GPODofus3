@@ -1,9 +1,9 @@
 # Guide de progression optimisée: Dofus 3
 
-![Image du projet](https://github.com/AnthoB-Dev/GPODofus3/blob/main/staticfiles/medias/project.png)
+![Image du projet](https://github.com/AnthoB-Dev/GPODofus3-dev/blob/main/static/medias/project.png)
 
-## La MàJ 1.0.2 arrive bientôt 
-Elle va apporter beaucoup de changements qualitatifs en terme de rédaction et une disposition modifiée de la structure visible dans le répo dev du projet ou directement en cliquant ici : https://github.com/AnthoB-Dev/GPODofus3-dev/blob/main/static/medias/project.png 
+## La MàJ 1.0.2 est là
+Elle apporte beaucoup de changements qualitatifs en terme de rédaction et une disposition modifiée de la structure pour une meilleure logique de lecture. 
 
 ## Bonjour et bienvenu sur GPODofus3.
 

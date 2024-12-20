@@ -57,6 +57,19 @@ module.exports = {
       config: {},
     },
   ],
+  "publishers": [
+    {
+      "name": "@electron-forge/publisher-github",
+      "config": {
+        "repository": {
+          "owner": "AnthoB-Dev",
+          "name": "GPODofus3-dev"
+        },
+        "prerelease": false,
+        "draft": false
+      }
+    }
+  ],
   plugins: [
     // Fuses sont utilisés pour activer/désactiver diverses fonctionnalités d'Electron
     new FusesPlugin({

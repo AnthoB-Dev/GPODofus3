@@ -10,26 +10,26 @@ def get_guides_and_navigation(guide, is_admin, alignment_ids, admin_ids):
         cache_key = f"all_guides_alignment_{'_'.join(map(str, alignment_ids))}"
         guides = cache.get(cache_key)
         if guides is None:
-            guides = Guide.objects.filter(alignment_id__in=alignment_ids).only("id", "title").order_by("page").all()
+            guides = Guide.objects.filter(alignment_id__in=alignment_ids, is_visible=True).only("id", "title").order_by("page").all()
             cache.set(cache_key, guides, 60 * 60)  # Cache pour 1h
         filter_ids = alignment_ids
     else:
         cache_key = f"all_guides_admin_{'_'.join(map(str, admin_ids))}"
         guides = cache.get(cache_key)
         if guides is None:
-            guides = Guide.objects.filter(alignment_id__in=admin_ids).only("id", "title").order_by("page").all()
+            guides = Guide.objects.filter(alignment_id__in=admin_ids, is_visible=True).only("id", "title").order_by("page").all()
             cache.set(cache_key, guides, 60 * 60)  # Cache pour 1h
         filter_ids = admin_ids
 
     previous_guide = None
     if guide.page > 0:
         previous_guide = (
-            Guide.objects.filter(page__lt=guide.page, page__gt=0, alignment_id__in=filter_ids)
+            Guide.objects.filter(page__lt=guide.page, page__gt=0, alignment_id__in=filter_ids, is_visible=True)
             .order_by("-page")
             .first()
         )
 
-    next_guide = Guide.objects.filter(page__gt=guide.page, alignment_id__in=filter_ids).order_by("page").first()
+    next_guide = Guide.objects.filter(page__gt=guide.page, alignment_id__in=filter_ids, is_visible=True).order_by("page").first()
 
     return guides, previous_guide, next_guide
 
@@ -84,3 +84,12 @@ def calculate_completion_percentage(achievement, user_alignment, guide):
     completed_quests_count = quests.filter(completed=True).count()
     
     return int((completed_quests_count / total_quests_count * 100)) if total_quests_count > 0 else 0
+
+def update_guides_visibility(): 
+    guides = Guide.objects.all()
+    for guide in guides:
+        if guide.page > 51:
+            guide.is_visible = False
+        else:
+            guide.is_visible = True
+        guide.save()

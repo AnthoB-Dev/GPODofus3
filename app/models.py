@@ -3,7 +3,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 
-GAME_VERSION = Decimal("2.73")
+GAME_VERSION = Decimal("3.0")
 DEFAULT_ALIGNMENT_ID = 3
 
 
@@ -163,6 +163,7 @@ class Guide(models.Model):
         Achievement, through="GuideAchievement", related_name="guides"
     )
     is_last_seen = models.BooleanField(default=False)
+    is_visible = models.BooleanField(default=True, verbose_name="Visible")
 
     def __str__(self):
         return self.title
@@ -280,6 +281,7 @@ class Quest(models.Model):
         max_length=100, verbose_name="Titre", help_text="Le titre unique de la quête"
     )
     url = models.URLField(max_length=255, help_text="URL de la page DPLN de la quête")
+    position = models.PositiveIntegerField(blank=True, null=True, help_text="Position de la quête par rapport aux autres du succès")
     alignment = models.ForeignKey(
         Alignment,
         on_delete=models.CASCADE,
@@ -314,6 +316,6 @@ class Quest(models.Model):
         return self.title
 
     class Meta:
-        ordering = ["id"]
+        ordering = ["position"]
         verbose_name = "Quête"
         verbose_name_plural = "Quêtes"

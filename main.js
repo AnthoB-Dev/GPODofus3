@@ -1,5 +1,6 @@
 (async () => {
   const { app, BrowserWindow, shell, dialog } = require("electron");
+  const { autoUpdater } = require('electron-updater');
   const { spawn } = require("child_process");
   const path = require("path");
   const fs = require("fs");
@@ -14,10 +15,12 @@
   let stdio;
   const installationMarker = path.join(app.getPath('userData'), '.installation_complete');
 
+  log.info(`Arguments de lancement : ${process.argv.join(' ')}`);
 
   const handleSquirrelEvent = async () => {
     if (process.argv.length > 1) {
       const squirrelEvent = process.argv[1];
+      log.info(`Événement Squirrel détecté : ${squirrelEvent}`);
   
       const appFolder = path.resolve(process.execPath, '..');
       const rootFolder = path.resolve(appFolder, '..');
@@ -38,6 +41,8 @@
       };
 
       if (squirrelEvent === '--squirrel-firstrun') {
+        log.info("Événement --squirrel-firstrun détecté.");
+      
       
         if (!fs.existsSync(installationMarker)) {
           log.info("Installation incomplète lors du premier lancement, attente de l'installation.");
@@ -75,6 +80,52 @@
         } finally {
           app.quit();
         }
+        return true;
+      }
+  
+      if (squirrelEvent === '--squirrel-uninstall') {
+        // Suppression des raccourcis
+        spawnUpdate(['--removeShortcut', exeName]);
+  
+        // Suppression des dossiers spécifiques avec réessai
+        try {
+          // Fonction de réessai
+          const deletePathWithRetry = (targetPath, retries = 3, delay = 1000) => {
+            return new Promise((resolve, reject) => {
+              const attemptDelete = (currentAttempt) => {
+                if (!fs.existsSync(targetPath)) {
+                  log.info(`Le dossier n'existe pas : ${targetPath}`);
+                  return resolve();
+                }
+                try {
+                  fs.rmSync(targetPath, { recursive: true, force: true });
+                  log.info(`Dossier supprimé : ${targetPath}`);
+                  resolve();
+                } catch (error) {
+                  if (currentAttempt < retries) {
+                    log.warn(`Tentative ${currentAttempt + 1} échouée pour supprimer ${targetPath}. Nouvelle tentative dans ${delay}ms.`);
+                    setTimeout(() => attemptDelete(currentAttempt + 1), delay);
+                  } else {
+                    reject(error);
+                  }
+                }
+              };
+              attemptDelete(0);
+            });
+          };
+  
+          // Chemin vers AppData\Local\GPODofus3
+          const localAppDataPath = path.join(process.env.LOCALAPPDATA, 'GPODofus3');
+          // Chemin vers AppData\Roaming\GPODofus3
+          const appDataPath = path.join(process.env.APPDATA, 'GPODofus3');
+  
+          await deletePathWithRetry(localAppDataPath);
+          await deletePathWithRetry(appDataPath);
+        } catch (error) {
+          log.error(`Erreur lors de la suppression des dossiers : ${error}`);
+        }
+  
+        app.quit();
         return true;
       }
   
@@ -142,6 +193,7 @@
         .split("\n")
         .map((p) => p.trim())
         .filter((p) => p.length > 0);
+      log.info(`Un ou plusieurs chemins Python trouvé.`);
       return pythonPaths;
     } catch (error) {
       log.error("Erreur lors de la recherche de Python :", error.message);
@@ -160,11 +212,15 @@
         const versionOutput = await executeCommand(`"${pyPath}"`, [
           "--version",
         ]);
+        log.info(`Version détectée pour ${pyPath} : ${versionOutput}`);
         const version = getPythonVersion(versionOutput);
         if (
           version &&
           (version.major > 3 || (version.major === 3 && version.minor >= 13))
         ) {
+          log.info(
+            `__ Python approprié trouvé : (Version ${version.major}.${version.minor}.${version.patch})`
+          );
           globalPythonPath = pyPath;
           return globalPythonPath;
         } else {
@@ -197,7 +253,7 @@
   };
 
   const getVenvPath = () => {
-    return path.join(__dirname, "venv");
+    return path.join(__dirname, "../../venv");
   }
 
   /**
@@ -207,6 +263,7 @@
    */
   const createVenv = async (globalPythonPath) => {
     const venvPath = getVenvPath();
+    log.info(`Chemin du virtual environment : ${venvPath}`);
 
     if (fs.existsSync(venvPath)) {
       log.info("Virtual environment déjà existant.");
@@ -235,6 +292,7 @@
           `"${path.join(venvPath, "Scripts", "python.exe")}"`,
           ["-m", "ensurepip", "--upgrade"]
         );
+        log.info(`Sortie de ensurepip : ${ensurePipOutput}`);
       } catch (ensurepipError) {
         log.warn(
           "Installation de pip via ensurepip a échoué. Essai avec get-pip.py..."
@@ -274,6 +332,7 @@
   // Fonction pour vérifier si les dépendances sont déjà installées
   const areDependenciesInstalled = async (pipPath) => {
     try {
+      log.info("Vérification des dépendances avec pip freeze...");
       const installedPackagesRaw = await executeCommand(`"${pipPath}"`, [
         "freeze",
       ]);
@@ -286,6 +345,7 @@
         .map((line) => line.trim().toLowerCase());
       for (const requirement of requirements) {
         if (requirement && !installedPackages.includes(requirement)) {
+          log.info(`Dépendance ${requirement} manquante.`);
           return false;
         }
       }
@@ -302,9 +362,11 @@
   const installDependencies = async (venvPath) => {
     let pipPath = path.join(venvPath, "Scripts", "pip.exe");
   
+    log.info(`Vérification de pip à : ${pipPath}`);
   
     if (!fs.existsSync(pipPath)) {
       log.error(`pip.exe introuvable dans le venv à : ${pipPath}`);
+      log.info("Installation de pip dans le virtual environment...");
   
       try {
         pipPath = await getPipPath(venvPath);
@@ -344,6 +406,7 @@
           "-r",
           path.join(__dirname, "requirements.txt"),
         ]);
+        log.info("Dépendances installées avec succès.");
       } catch (error) {
         log.error(
           `Erreur lors de l'installation des dépendances : ${error.message}`
@@ -387,6 +450,11 @@
 
   // Fonction pour exécuter le processus Django
   const runDjangoProcess = (pythonPath, djangoProjectPath) => {
+    const managePyPath = path.join(djangoProjectPath, "manage.py");
+
+    log.info("- Lancement du processus Django.");
+    log.info(`Chemin Python utilisé : ${pythonPath}`);
+    log.info(`Chemin manage.py utilisé : ${managePyPath}`);
 
     stdOn ? (stdio = "pipe") : (stdio = "ignore");
 
@@ -395,6 +463,8 @@
       shell: false,
       stdio: stdio,
     });
+
+    log.info("Django process spawned.");
 
     if (stdOn) {
       // Capture de la sortie standard
@@ -425,6 +495,7 @@
           `Le serveur Django s'est arrêté avec le code ${code}.`
         );
       }
+      log.info("Processus Django terminé.");
       app.quit();
     });
 
@@ -433,11 +504,15 @@
 
   // Fonction pour démarrer Django
   const startDjango = async () => {
+    log.info("- Démarrage de Django. Début du processus.");
     pythonPath = getVenvPythonPath(getVenvPath());
+    log.info(`__Python_path : ${pythonPath}`);
 
     try {
       const djangoProjectPath = path.join(__dirname);
+      log.info(`__Django_project_path : ${djangoProjectPath}`);
       djangoProcess = runDjangoProcess(pythonPath, djangoProjectPath);
+      log.info("Processus Django démarré avec le PID :", djangoProcess.pid);
     } catch (error) {
       log.error("Erreur lors du démarrage du processus Django :", error);
       dialog.showErrorBox(
@@ -479,23 +554,19 @@
 
   // Fonction pour créer la fenêtre principale
   const createWindow = () => {
+    log.info("- Création de la fenêtre principale.");
+
     mainWindow = new BrowserWindow({
-      width: 1366,
-      height: 768,
+      width: 1600,
+      height: 900,
       resizable: true,
       minWidth: 1280,
       minHeight: 720,
-      maxWidth: 1600,
-      maxHeight: 900,
+      maxWidth: 1920,
+      maxHeight: 1080,
       autoHideMenuBar: true,
-      icon: path.join(
-        __dirname,
-        "staticfiles",
-        "medias",
-        "icons",
-        "favicons",
-        "icon.ico"
-      ),
+      icon: path.join(__dirname, "app.ico"),
+      
       webPreferences: {
         preload: path.join(__dirname, "preload.js"),
         nodeIntegration: false,
@@ -508,7 +579,7 @@
     mainWindow.loadURL("http://localhost:8000/");
 
     mainWindow.on("close", () => {
-      log.info("Fermeture de la fenêtre principale.");
+      log.info("- Fermeture de la fenêtre principale.");
       mainWindow = null;
     });
 
@@ -520,13 +591,12 @@
     // Supprimer complètement le menu
     mainWindow.setMenu(null);
 
-    log.info("Application demarree.");
-    log.warn("Ne pas fermer ce terminal. C'est le serveur local permettant au coeur de l'application de fonctionnee.");
-    log.info("L'application installee et lancee via l'installateur comprend cette etape ce qui n'ouvre a l'arrivee qu'une fenetre.");
+    log.info("Fenêtre principale créée. Fin du processus.");
   };
 
   // Gérer les événements de l'application
   app.whenReady().then(async () => {
+    autoUpdater.checkForUpdatesAndNotify();
     await startDjango();
     createWindow();
 
@@ -534,6 +604,27 @@
       log.info("app.on_activate : Application activée.");
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
+  });
+
+  autoUpdater.on('checking-for-update', () => {
+    console.log('Vérification des mises à jour...');
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    console.log('Nouvelle mise à jour disponible :', info);
+  });
+
+  autoUpdater.on('update-not-available', (info) => {
+    console.log('Pas de mise à jour disponible.');
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('Erreur pendant la mise à jour :', err);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    console.log('Mise à jour téléchargée. Elle sera installée au prochain démarrage.');
+    autoUpdater.quitAndInstall(); // Redémarre l'application pour installer la mise à jour
   });
 
   app.on("window-all-closed", () => {

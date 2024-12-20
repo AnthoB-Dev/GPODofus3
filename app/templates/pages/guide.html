@@ -5,6 +5,14 @@
       {%include "sections/nav.html"%}
     </div>
     <div id="centerContent">
+      <section id="objectivesAndAchievements">
+        <div id="objectives">
+          {%include "sections/objectives.html"%}
+        </div>
+        <div id="achievements">
+          {%include "sections/achievements.html" %}
+        </div>
+      </section>
       <section id="guide">
         {% include "sections/guide_explanations.html" %}
       </section>
@@ -13,14 +21,5 @@
       </section>
     </div>
   </main>
-
-  <aside>
-    <section id="objectives">
-      {%include "sections/objectives.html"%}
-    </section>
-    <section id="achievements">
-      {%include "sections/achievements.html" %}
-    </section>
-  </aside>
 </turbo-frame>
 {% endblock %}
