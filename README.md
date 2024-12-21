@@ -13,7 +13,6 @@ Elle apporte beaucoup de changements qualitatifs en terme de rédaction et une d
 **N'hésitez pas** à mettre une **étoile** sur [le Github du projet](https://github.com/AnthoB-Dev/GPODofus3) si vous **appréciez** l'application, ou simplement si l'**initiative** vous interesse.
 J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de qualité de vie, d'optimisations structurelles de l'application, et bien plus !
 
-- Le guide de Skyzio 3.0 corrige certain aspects qui étaient manquant jusqu'alors comme les liens, et de meilleur explications. Je vais continuer d'améliorer l'application pour ajouter une plus value suffisante mais pour l'heure je recommande l'utilisation de son spreadsheet. Ceci dit, je vous invite quand même à tester l'application qui est à jour jusqu'aux alentours du niveau 60 et me donner votre avis sur celle-ci.
 - **<span style="color:red;">LIRE ATTENTIVEMENT LA SECTION INSTALLATION SVP.</span>**
 - **<span style="color:red;">Ne supporte que Windows pour le moment.</span>**
 
@@ -80,6 +79,8 @@ Mais avec la sortie de **Dofus 3** je me suis dit que ça allait changer. C'est 
 
 
 ### Les défauts qui m'ont inspirés 
+
+Les défauts qui étaient présents avant la sortie du spreadsheet 3.0 de Skyzio ont été corrigés en bonne partie par ce dernier.
 
 1. En tant que nooblar complet du **questing**, j'ai vite vu les inconvénients en terme de **présentation** du format **spreadsheet**... Un paradoxe entre trop d'infos et pas assez.
 
