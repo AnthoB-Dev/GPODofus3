@@ -5,7 +5,7 @@
 ## La MàJ 1.0.2 est là
 Elle apporte beaucoup de changements qualitatifs en terme de rédaction et une disposition modifiée de la structure pour une meilleure logique de lecture. 
 
-## Bonjour et bienvenu sur GPODofus3.
+## Bienvenu sur GPODofus3.
 
 
 **GPODofus3** (*GPOD3 pour les intimes*) a été développé dans le but **d'apporter** ce qui, à mon humble avis et avec toute la **subjectivité** que cela implique, **manque** au guide du -presque- même nom de [Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548).
@@ -80,11 +80,11 @@ Mais avec la sortie de **Dofus 3** je me suis dit que ça allait changer. C'est 
 
 ### Les défauts qui m'ont inspirés 
 
-Les défauts qui étaient présents avant la sortie du spreadsheet 3.0 de Skyzio ont été corrigés en bonne partie par ce dernier.
+Notez que les défauts qui étaient présents avant la sortie du spreadsheet 3.0 de Skyzio ont été corrigés en bonne partie par ce dernier.
 
 1. En tant que nooblar complet du **questing**, j'ai vite vu les inconvénients en terme de **présentation** du format **spreadsheet**... Un paradoxe entre trop d'infos et pas assez.
 
-2. Le **second** inconvénients à mon sens est de n'avoir **que du visuel** finalement, à part la possibilité de copier les noms des succès, et dans la douleur de spreadsheet (vous l'aurez compris je n'aime pas les spreadsheets), pour ensuite le coller dans DPLN, je trouve que ça **manque de liens**, et **d'interactibilité**.
+2. Le **second** inconvénient à mon sens est de n'avoir **que du visuel** finalement, à part la possibilité de copier les noms des succès, et dans la douleur de spreadsheet (vous l'aurez compris je n'aime pas les spreadsheets), pour ensuite le coller dans DPLN, je trouve que ça **manque de liens**, et **d'interactibilité**.
 
 3. Et enfin : le **manque de guidance** ! Je sais que c'est le but **recherché** par Skyzio qui souhaite laisser aux lecteurs de son guide le **choix** de prendre leurs propres **décisions**, et je le respecte. J'en partage la philosophie. 
 Malgré tout, peut être que des gens passeront **à côté** de ce très bon guide à cause du **manque de guidance** ? 
@@ -102,22 +102,22 @@ Comme dit précedemment, j'ai essayer de faire en sorte d'apporter ce qu'il peut
 
 ### Ce qu'apporte GPOD3
 
-- **Un système de Guides** : Basé sur la section *Schéma global* du [guide de Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548). Naviguable via un système de **pagination** (précédent, suivant) et un menu **déroulant**. Je les ai **revisités** pour y inclure des informations importantes, des explications un peu plus développés, etc, du mieux que j'ai pu.
+- **Un système de Guides** : Basé sur la section *Schéma global* du [guide de Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548). Naviguable via un système de **pagination** (précédent, suivant) et un menu **déroulant**. Je les ai **revisités** pour y inclure des informations importantes, des explications un peu plus développés, etc, au meilleur de ma capacité. Pour rappel je suis un noob en ce qui concerne les quêtes dans Dofus.
 
-- **Une section Quêtes** : Un autre reproche que j'ai pu faire lorsque j'ai vu le [guide de Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548) c'était le manque d'une **section quêtes**. Il y a *succès concernés* mais pas de quêtes. Et bien là voici, avec ses **liens** et son système de **complétion** pour suivre l'avancée du **succès** !
+- **Une section Quêtes** : Un autre reproche que j'ai pu faire lorsque j'ai vu le [guide de Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548) c'était le manque d'une **section quêtes**. Il y a *succès concernés* mais pas de quêtes. Et bien là voici, avec ses **liens** et son système de **complétion** pour suivre l'avancée des **succès** !
 
-- **Des liens** : Un sacré paquet d'ailleurs, ajoutés un part un à la mano (dédicace aux macros souris et clavier, sans elles je ne serais pas là aujourd'hui) menant vers [Dofus pour les noobs](https://www.dofuspourlesnoobs.com/) dès lors que c'est possible. Donc actuellement sur les **quêtes**, sur les **succès**.
+- **Des liens** : Un sacré paquet d'ailleurs, ajoutés un part un à la mano (dédicace aux macros souris et clavier, sans elles je ne serais pas là aujourd'hui) menant vers [Dofus Pour Les Noobs](https://www.dofuspourlesnoobs.com/) dès lors que c'est possible. Donc actuellement sur les **quêtes**, sur les **succès**. J'ajoute aussi parfois des liens directement dans les guides vers DofusDB ou autre.
 
-- **Une section Succès avec** :
+- **Une section Succès concernés avec** :
 
     - **Un repère visuel pour connaitre les prérequis d'un succès** : Concrètement j'ai incorporé la section **à prévoir** de [DPLN](https://www.dofuspourlesnoobs.com), exemple : "Ce qu'il vous faudra prévoir" dans la [quête de l'emeraude](https://www.dofuspourlesnoobs.com/dofus-emeraude.html). 
-J'ai ajouté des petites icônes dans la section **Succès** permettant d'un coup d'oeil de savoir qu'il y aura un prérequis et quel(s) prérequis pour completer le succès ! Plus qu'à cliquer sur le lien du succès et [DPLN](https://www.dofuspourlesnoobs.com) vous donnera les détails.
+J'ai ajouté des petites icônes dans la section **Succès** permettant d'un coup d'oeil de savoir qu'il y aura un prérequis et quel(s) prérequis pour completer le succès ! Plus qu'à cliquer sur le lien du succès et [DPLN](https://www.dofuspourlesnoobs.com) vous donnera les détails (Si je ne les ai pas moi-même fournis dans le guide)
 
     - **Deux autres repères visuel pour connaitre l'avancée du succès d'un coup d'oeil** : 
         - Une **bordure** entoure les succès lors de la complétion de quêtes selon un **code couleur** simple : 
         Supérieur à 0% : <span style="color:#eb2126;">Rouge</span>; Supérieur ou égal à 50% : <span style="color:#dea325;">Orange</span>; Inférieur à 100% : <span style="color:#198309;">Vert</span>
         Ainsi, s'il n'y a **aucune** bordure : **tout est à faire**; Si la bordure est **verte**: **plus rien n'est à faire**. En un coup d'oeil on **élimine** déjà 2 possibilités sur 4 !
-        - Un **pourcentage** permet dans le cas où l'ont voit du rouge ou du vert à donner une information précise de l'avancée actuelle du succès
+        - Un **pourcentage** permet dans le cas où l'ont voit du rouge ou du vert à donner une information précise de l'avancée actuelle du succès.
 
 - **Un retour sur le dernier guide et succès consulté** : Pour ne pas perdre de temps à retrouvé là où on s'était arrêté la veille.
 
@@ -129,9 +129,9 @@ C'est pour ça que cette application se base sur son travail ! Merci Skyzio !
 
 - **Une application parfaite** : J'ai une formation **web developpeur** mais je ne travail malheureusement pas dans le milieu. Je **manque d'experiences** et c'est la première fois que j'utilise la plupart des techs utilisées dans cette application (**Django, Electron**). 
 Même **Python** n'est pas mon langage de croisière ! 
-Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **réduire** l'impact de mon application sur la **mémoire**. Il faudra compter environ **50mo de mémoire** disponible en idle (mon Discord prends 200mo au moment où j'écris).
+Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **réduire** l'impact de mon application sur la **mémoire**. Il faudra compter environ **100mo de mémoire** disponible en idle (mon Discord prends 250mo au moment où j'écris).
 
-- **La simplicité de l'utilisation d'un spreadsheet** : Malgré ce que j'en dis, dans un spreadsheet il suffit de faire un CTRL + F et de chercher dans la page pour facilement trouver l'information recherchée.
+- **La simplicité de l'utilisation d'un spreadsheet** : Malgré ce que j'en dis, dans un spreadsheet il suffit de faire un CTRL + F et de chercher dans la page pour facilement trouver l'information recherchée. Des améliorations viendront sur ce point mais pour le moment je n'ai pas de barre de recherche.
 
 - **Tout ce qu'un bon dev aurait pu ajouté, et tout ce que je n'ai pas encore ajouté**.
 
@@ -140,9 +140,7 @@ Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **rédu
 **<span style="color:red;">LIRE ATTENTIVEMENT CETTE SECTION SVP</span>**
 
 ### Téléchargement
-Disponible soit :
-- À droite de cette page section **Release** latest.
-- Dans la section [Release](https://github.com/AnthoB-Dev/GPODofus3/tags), cliquez sur la dernière version (**1.0.X**).
+À droite de cette page, section **Release** latest ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases).
 
 ### Installation
 #### Via l'installateur
@@ -152,7 +150,7 @@ Faites **<span style="color: red;">attention à 3 points</span>** avec l'install
     - Lorsque l'installateur Python s'ouvre, sélectionnez bien <span style="color: red;">Ajouter Python au Path</span> ainsi qu'en <span style="color: red;">privilège administrateur</span>. Ceci devrait vous évitez de relancer votre session (ou redémarrer l'ordi).
 2. Une fois **Python installé**, vous pouvez lancer le **Setup.exe** mais attention sur un point : Lorsque non lancer en administrateur, il est possible que les dépendances ne s'installent pas correctement. Si c'est votre cas, lancer le **Setup.exe en administrateur** devrait résoudre le problème.
     - J'utilise le conditionnel car sur les 5 machines où a été tester l'application, il y en a une pour laquelle le lancement en admin n'a pas fonctionné. Je ne connais pas la raison et j'ai manqué de temps pour la trouver. Si c'est votre cas, malheureusement vous ne pourrez pas utiliser **GPODofus3**, je m'en excuse.
-3. L'installateur **se ferme AVANT la fin de l'installation**. Attendez bien que la fenêtre l'application s'ouvre d'elle même. L'attente dépendra de la vitesse de votre connexion mais comptez au moins **30 secondes**.
+3. L'installateur **se ferme AVANT la fin de l'installation**. Attendez bien que la fenêtre de l'application s'ouvre d'elle même. L'attente dépendra de la vitesse de votre connexion mais comptez au minimum **30 secondes**.
 
 #### Avec le source code (zip)
 La procédure est plus simple mais **demande un terminal d'ouvert** lorsque l'application est lancée : 
@@ -168,7 +166,7 @@ La procédure est plus simple mais **demande un terminal d'ouvert** lorsque l'ap
 Vous pouvez supprimer l'application depuis "**Ajouter ou supprimer des programmes**" sous Windows.
 
 #### Si via source code (zip)
-Simplement **supprimer le dossier** où vous l'avez décompresser, et si vous le souhaitez, désinstaller **Python** puis **Node** depuis "Ajouter ou supprimer des programmes" sous Windows. 
+Simplement **supprimer le dossier** où vous l'avez décompressé, et si vous le souhaitez, désinstaller **Python** puis **Node** depuis "Ajouter ou supprimer des programmes" sous Windows. 
 
 ## Utilisation
 Le tout premier Guide de l'application est un guide tutoriel expliquant "qui fait quoi" dans l'application. Je vous invite donc à vous rendre sur celui-ci lorsque vous avez un questionnement quelconque sur les fonctionnalités de l'app.
