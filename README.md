@@ -2,8 +2,16 @@
 
 ![Image du projet](https://github.com/AnthoB-Dev/GPODofus3-dev/blob/main/static/medias/project.png)
 
-## La MàJ 1.0.2 est là
-Elle apporte beaucoup de changements qualitatifs en terme de rédaction et une disposition modifiée de la structure pour une meilleure logique de lecture. 
+## Mises à jour
+### À venir : version 1.0.3
+Arrive très bientôt. Surement ce dimanche 12 janvier dans la journée.
+Ce qui arrive : 
+- Suite des guides (assez peu cependant mais le rythme va augmenter maintenant le rush passé)
+- Beaucoup d'améliorations sur les guides déjà présent (Je remercie mon testeur Aïhoko, noob complet de Dofus, pour ses retours constructifs)
+- Et enfin une option de sauvegarde d'avancée pour ne pas perdre la progression lors d'une mise à jour de l'application.
+
+### Dernière : version 1.0.2
+Apporte beaucoup de changements qualitatifs en terme de rédaction et une disposition modifiée de la structure pour une meilleure logique de lecture. 
 
 ## Bienvenu sur GPODofus3.
 
