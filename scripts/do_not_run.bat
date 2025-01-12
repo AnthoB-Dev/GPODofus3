@@ -19,7 +19,13 @@ REM Definir le chemin vers les installateurs
 set "INSTALLER_DIR=dependencies"
 
 REM Obtenir le chemin du dossier contenant le script
-set "SCRIPT_DIR=%~dp0"
+set "CURRENT_DIR=%~dp0"
+
+REM Obtenir le dossier parent
+for %%I in ("%CURRENT_DIR%..") do set "SCRIPT_DIR=%%~fI"
+
+REM Afficher le résultat pour vérifier
+echo SCRIPT_DIR=%SCRIPT_DIR%
 
 REM Changer le repertoire courant vers le script directory
 cd /d "%SCRIPT_DIR%"
@@ -117,7 +123,7 @@ echo ===============================
 echo.
 
 REM Creer l'environnement virtuel et rediriger les sorties vers un fichier log
-python -m venv venv > venv_creation.log 2>&1
+python -m venv venv
 set "VENV_ERRORLEVEL=!errorlevel!"
 if "!VENV_ERRORLEVEL!" neq "0" (
     echo Erreur lors de la creation de l'environnement virtuel.
@@ -223,6 +229,6 @@ echo ===============================
 
 echo.
 echo ==========================================
-echo = Installation terminee. Vous pouvez fermer ce terminal.
+echo = Installation terminee. Vous pouvez fermer ce terminal et lancer run.bat.
 echo ==========================================
 pause >nul & exit

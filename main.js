@@ -253,7 +253,7 @@
   };
 
   const getVenvPath = () => {
-    return path.join(__dirname, "../../venv");
+    return path.join(__dirname, "venv");
   }
 
   /**
