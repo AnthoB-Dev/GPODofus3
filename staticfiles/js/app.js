@@ -12,13 +12,13 @@ const initializeEvents = () => {
 
     nav.updateSelectedGuide();
     nav.addNavEventListeners();
+    nav.addKeysEventListeners();
     quests.addQuestEventListeners();
     achievements.addAchievementBtnClickEventListeners();
     guide.addGuideEventListeners();
     guide.addGuideAlignmentFormEventListener();
     quests.toggleBtnBackgroundStyle();
     quests.validateAllBtnStyle();
-    nav.addKeysEventListeners();
 
     eventsInitialized = true;
 };
@@ -77,5 +77,6 @@ document.addEventListener("turbo:submit-end", (e) => {
         quests.toggleBtnBackgroundStyle();
         quests.validateAllBtnStyle();
         achievements.addAchievementBtnClickEventListeners();
+        nav.removeMessages();
     }, 10);
 })

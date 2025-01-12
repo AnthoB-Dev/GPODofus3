@@ -28,4 +28,6 @@ urlpatterns = [
     ),
     path('toggle-quest/<int:quest_id>/', views.toggle_quest_completion, name='toggle_quest_completion'),
     path('alignment/', views.alignment_choice, name='alignment_choice'),
+    path('create-save', views.create_save, name="create_save"),
+    path('load-save', views.load_save, name="load_save"),
 ]

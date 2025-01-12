@@ -41,7 +41,12 @@
           <p><i class="fa-brands fa-discord"></i>shiinasan.</p>
         </div>
       </div>
+      <i class="fa-solid fa-gear" id="gear" 
+        data-create-save-url="{% url 'app:create_save' %}" 
+        data-load-save-url="{% url 'app:load_save' %}"
+      ></i>
     </div>
+    <div id="messages" class="hidden"></div>
     
     <div id="content">{% block content %}{% endblock %}</div>
   </body>

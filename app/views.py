@@ -1,12 +1,14 @@
-import logging
-from django.http import HttpResponse
+import json
+import os
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.cache import cache
 from django.db.models import Prefetch
-from app.models import Achievement, Alignment, Guide, GuideAchievement, Quest, User
+from app.models import Achievement, AchievementQuest, Alignment, Guide, GuideAchievement, Quest, User
 from django.template.loader import render_to_string
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from .utils import (
     get_navigation_context,
     get_filtered_quests,
@@ -229,3 +231,127 @@ def alignment_choice(request):
         user.save()
         
     return redirect('app:guide_detail', guide_id=174)
+
+
+@csrf_exempt
+def create_save(request):
+    success = True
+    message = "La sauvegarde a été créée avec succès."  
+    
+    try:
+        # Perform the save operation
+        data = []
+        for guide_achievement in GuideAchievement.objects.select_related('guide', 'achievement').filter(guide__is_visible=True):
+            quests = AchievementQuest.objects.filter(achievement=guide_achievement.achievement).select_related('quest')
+            quest_data = [
+                {"id": quest.quest.id, "completed": quest.quest.completed}
+                for quest in quests
+            ]
+            data.append({
+                "guide": {"id": guide_achievement.guide.id},
+                "achievement": {"id": guide_achievement.achievement.id},
+                "quests": quest_data,
+                "is_last_seen": guide_achievement.is_last_seen,
+            })
+
+        appdata_folder = os.path.join(os.environ.get('APPDATA'), 'GPODofus3')
+        if not os.path.exists(appdata_folder):
+            os.makedirs(appdata_folder)
+
+        output_file = os.path.join(appdata_folder, 'save.json')
+        old_save_file = os.path.join(appdata_folder, 'old_save.json')
+
+        if os.path.exists(old_save_file):
+            os.remove(old_save_file)
+
+        if os.path.exists(output_file):
+            os.rename(output_file, old_save_file)
+
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+            
+    except Exception as e:
+        success = False
+        message = f"Une erreur s'est produite lors de la sauvegarde : {str(e)}"
+        print(f"Une erreur s'est produite lors de la sauvegarde : {str(e)}")
+
+    if success:
+        return render(request, 'sections/_messages.html', {
+            'success': success,
+            'message': message
+        }, content_type="text/vnd.turbo-stream.html")
+    else:
+        return render(request, 'sections/_messages.html', {
+            'success': success,
+            'message': message
+        }, content_type="text/vnd.turbo-stream.html")
+
+
+@csrf_exempt
+def load_save(request):
+    success = True
+    message = "Sauvegarde chargée avec succès.<br/>Redémarrez l'application ou changez de guide pour que les changements prennent effet." 
+    
+    try:
+        # Charger les données depuis le fichier JSON présent dans le dossier AppData\Roaming\GPODofus3
+        appdata_folder = os.path.join(os.environ.get('APPDATA'), 'GPODofus3')
+        output_file = os.path.join(appdata_folder, 'save.json')
+        with open(output_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        for item in data:
+            try:
+                # Récupérer le Guide correspondant à l'ID
+                guide = Guide.objects.get(id=item['guide']['id'])
+            except Guide.DoesNotExist:
+                print(f"Guide avec l'ID {item['guide']['id']} n'existe pas dans la base de données.")
+                continue  # Ignore cet élément si le guide n'existe pas
+
+            try:
+                # Récupérer l'achievement correspondant à l'ID
+                achievement = Achievement.objects.get(id=item['achievement']['id'])
+            except Achievement.DoesNotExist:
+                print(f"Achievement avec l'ID {item['achievement']['id']} n'existe pas dans la base de données.")
+                continue  # Ignore cet élément si l'achievement n'existe pas
+
+            # Si un GuideAchievement avec is_last_seen=True existe déjà pour ce guide, le réinitialiser
+            if item['is_last_seen']:
+                GuideAchievement.objects.filter(guide=guide, is_last_seen=True).update(is_last_seen=False)
+
+            # Mettre à jour ou créer un GuideAchievement avec les nouveaux champs
+            guide_achievement, created = GuideAchievement.objects.update_or_create(
+                guide=guide,
+                achievement=achievement,
+                defaults={'is_last_seen': item['is_last_seen']}  # Mettre à jour le champ is_last_seen
+            )
+
+            # Mettre à jour les quêtes liées à cet achievement
+            for quest_item in item['quests']:
+                try:
+                    # Récupérer la quête correspondant à l'ID
+                    quest = Quest.objects.get(id=quest_item['id'])
+                except Quest.DoesNotExist:
+                    print(f"Quest avec l'ID {quest_item['id']} n'existe pas dans la base de données.")
+                    continue  # Ignore cet élément si la quête n'existe pas
+
+                # Mettre à jour la complétion de la quête
+                quest.completed = quest_item['completed']
+                quest.save()  # Sauvegarder la quête après mise à jour
+                
+    except Exception as e:
+        success = False
+        message = f"Une erreur s'est produite lors du chargement : {str(e)}.<br/>Vérifiez la présence de save.json à l'emplacement indiqué."
+        print(f"Une erreur s'est produite lors du chargement : {str(e)}")
+
+    if success:
+        print("Success")
+        return render(request, 'sections/_messages.html', {
+            'success': success,
+            'message': message
+        }, content_type="text/vnd.turbo-stream.html")
+    else:
+        print(success, "Error")
+        return render(request, 'sections/_messages.html', {
+            'success': success,
+            'message': message
+        }, content_type="text/vnd.turbo-stream.html")

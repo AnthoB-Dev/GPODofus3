@@ -34,6 +34,14 @@ export const updateSelectedGuide = () => {
     });
 };
 
+/**
+ * Gère le clique sur l'icone des options.
+ */
+const handleOptionGearClick = async() => {
+    await createOptionsModal()
+    addOptionsListeners();
+};
+
 const handleGuideHeaderClick = (event) => {
     event.stopPropagation();
     toggleDropdown();
@@ -64,6 +72,7 @@ export const addNavEventListeners = () => {
     const guideHeader = topNav.querySelector(".guide-header");
     const dropDownContent = topNav.querySelector(".dropdown-content");
     const overflow = dropDownContent.querySelector(".overflow");
+    const optionsGear = document.querySelector("#gear");
 
     if (!guideHeader.hasAttribute("data-initialized")) {
         guideHeader.setAttribute("data-initialized", "true");
@@ -75,6 +84,8 @@ export const addNavEventListeners = () => {
     });
 
     document.addEventListener("click", handleDocumentClick);
+
+    optionsGear.addEventListener("click", handleOptionGearClick)
 
     // Ajout des écouteurs d'événements pour les boutons de navigation de la page
     addPageNavEventListeners();
@@ -100,6 +111,162 @@ export const removeNavEventListeners = () => {
     // Suppression des écouteurs d'événements pour les boutons de navigation de la page
     removePageNavEventListeners();
 };
+
+/**
+ * Supprime la fenêtre des options.
+ */
+const closeOptionsModal = () => {
+    const modal = document.querySelector('.optionModalBackground');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+/**
+ * Crée la fenêtre des options.
+ */
+const createOptionsModal = () => {
+    return new Promise ((resolve) => {
+        const gearIcon = document.querySelector('#gear');
+        const createSaveUrl = gearIcon.getAttribute('data-create-save-url');
+        const loadSaveUrl = gearIcon.getAttribute('data-load-save-url');
+
+        // Création du conteneur & background 50% black
+        const background = document.createElement('div');
+        background.classList.add('optionModalBackground');
+        const modal = document.createElement('div');
+        modal.classList.add('optionModal')
+        const closeButton = document.createElement('div');
+        closeButton.classList.add('optionCloseButton');
+        closeButton.id = 'optionsCloseBtn';
+
+        const closeIcon = document.createElement('i');
+        closeIcon.classList.add('fa-solid', 'fa-xmark');
+        
+        closeButton.appendChild(closeIcon);
+        modal.appendChild(closeButton);
+    
+        // Création du conteneur des settings
+        const containerLeft = document.createElement('div');
+        containerLeft.classList.add('optionLeftPanel');
+        const leftTitle = document.createElement('h4');
+        leftTitle.innerText = "Options";
+        const settingsContainer = document.createElement('div');
+        settingsContainer.classList.add('settingsContainer');
+        
+        // Création du setting "Thèmes"
+        const settingThemes = document.createElement('button');
+        settingThemes.classList.add('optionContainer');
+        const iconTheme = document.createElement('i');
+        iconTheme.classList.add('fa-solid', 'fa-moon')
+        const pThemes = document.createElement('p');
+        pThemes.innerText = "Thèmes";
+        // Désactivé le temps de l'implémenter
+        settingThemes.disabled = true;
+        settingThemes.style.background = "#999da1";
+        settingThemes.style.cursor = "not-allowed";
+        
+        settingThemes.appendChild(iconTheme);
+        settingThemes.appendChild(pThemes);
+        
+        // Création du setting "Sauvegarde"
+        const settingSave = document.createElement('div');
+        settingSave.classList.add('optionContainer', 'active');
+        const iconSave = document.createElement('i');
+        iconSave.classList.add('fa-solid', 'fa-floppy-disk');
+        const pSave = document.createElement('p');
+        pSave.innerText = "Sauvegarde";
+    
+        settingSave.appendChild(iconSave);
+        settingSave.appendChild(pSave);
+    
+        settingsContainer.appendChild(settingThemes);
+        settingsContainer.appendChild(settingSave);
+    
+        containerLeft.appendChild(leftTitle);
+        containerLeft.appendChild(settingsContainer);
+    
+        // Création du conteneur des options des settings
+        const containerRight = document.createElement('div');
+        containerRight.classList.add('optionRightPanel');
+        
+        // Création de l'option de sauvegarde du setting sauvegarde
+        const settingSaveO1 = document.createElement('a');
+        settingSaveO1.id = "option-save";
+        settingSaveO1.setAttribute('data-turbo-stream', '');
+        settingSaveO1.setAttribute('data-turbo-method', 'post');
+        settingSaveO1.href = createSaveUrl;
+        settingSaveO1.target = "blank";
+        settingSaveO1.classList.add('settingsContainer');
+        const o1Icon = document.createElement('i');
+        o1Icon.classList.add('fa-solid', 'fa-upload');
+        const o1TextsContainer = document.createElement('div');
+        o1TextsContainer.classList.add('settingTextsContainer');
+        const o1Title = document.createElement('p');
+        o1Title.classList.add('settingTitle');
+        o1Title.innerText = "Créer un fichier de sauvegarde";
+        const o1UnderTitle = document.createElement('p');
+        o1UnderTitle.classList.add('settingDescription');
+        o1UnderTitle.innerHTML = "Créer un fichier dans AppData\\Roaming\\GPODofus3 qui sauvegarde la progression des quêtes.<br/>À utiliser avant de mettre à jour l’application. Chaque nouvelle sauvegarde remplace l'ancienne mais l'avant dernière est gardée en étant renommée old_save. En cas de problèmes avec la dernière sauvegarde, rennomez old_save en save pour revenir en arrière.";
+    
+        o1TextsContainer.appendChild(o1Title);
+        o1TextsContainer.appendChild(o1UnderTitle);
+        
+        settingSaveO1.appendChild(o1Icon);
+        settingSaveO1.appendChild(o1TextsContainer);
+    
+        containerRight.appendChild(settingSaveO1);
+        
+        // Création de l'option de chargement du setting sauvegarde
+        const settingSaveO2 = document.createElement('a');
+        settingSaveO2.id = "option-load";
+        settingSaveO2.setAttribute('data-turbo-stream', '');
+        settingSaveO2.setAttribute('data-turbo-method', 'post');
+        settingSaveO2.href = loadSaveUrl;
+        settingSaveO2.target = "blank";
+        settingSaveO2.classList.add('settingsContainer');
+        const o2Icon = document.createElement('i');
+        o2Icon.classList.add('fa-solid', 'fa-download');
+        const o2TextsContainer = document.createElement('div');
+        o2TextsContainer.classList.add('settingTextsContainer');
+        const o2Title = document.createElement('p');
+        o2Title.classList.add('settingTitle');
+        o2Title.innerText = "Charger la sauvegarde";
+        const o2UnderTitle = document.createElement('p');
+        o2UnderTitle.classList.add('settingDescription');
+        o2UnderTitle.innerHTML = "Charge le fichier de sauvegarde situé à l’emplacement AppData\\Roaming\\GPODofus3.<br/>À utiliser une fois l’application mise à jour.";
+    
+        o2TextsContainer.appendChild(o2Title);
+        o2TextsContainer.appendChild(o2UnderTitle);
+        
+        settingSaveO2.appendChild(o2Icon);
+        settingSaveO2.appendChild(o2TextsContainer);
+    
+        containerRight.appendChild(settingSaveO2);
+    
+        modal.appendChild(containerLeft);
+        modal.appendChild(containerRight);
+    
+        background.appendChild(modal);
+
+        document.body.appendChild(background);
+        resolve();
+    })
+}
+
+/**
+ * Supprime les messages de confirmation de réussite ou d'échec.
+ */
+export const removeMessages = () => {
+    const messages = document.querySelector('#messages');
+    let timeout;
+
+    messages.classList.contains('failure') ? timeout = 10000 : timeout = 6000
+
+    setTimeout(() => {
+        messages.classList.add('hidden');
+    }, timeout);
+}
 
 const toggleDropdown = () => {
     const topNav = document.getElementById("topNav");
@@ -283,6 +450,7 @@ export const addKeysEventListeners = () => {
     document.addEventListener('keydown', handleKeys);
     document.addEventListener('keyup', handleKeys);
 };
+
 export const removeKeysEventListeners = () => {
     document.removeEventListener('keydown', handleKeys);
     document.removeEventListener('keyup', handleKeys);
@@ -303,3 +471,20 @@ const removePageNavEventListeners = () => {
         button.removeEventListener('click', handlePageNavButtonClick);
     });
 };
+
+/**
+ * Gère le clique sur la X de fermeture des options.
+ * TODO - Gérer la fermeture en cliquant en dehors de la fenêtre
+ */
+const addOptionsListeners = () => {
+    const optionsCloseBtn = document.querySelector('#optionsCloseBtn');
+    // const backgroundModal = document.querySelector('.optionModalBackground');
+
+    optionsCloseBtn.addEventListener('click', () => {
+        closeOptionsModal();
+    });
+
+    // backgroundModal.addEventListener('click', () => {
+    //     closeOptionsModal();
+    // });
+}

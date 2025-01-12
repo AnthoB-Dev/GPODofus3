@@ -1,0 +1,7 @@
+<turbo-stream action="replace" target="messages">
+  <template>
+    <div id="messages" class="{% if success == True %}success{% else %}failure{% endif %}">
+      {{ message|safe }}
+    </div>
+  </template>
+</turbo-stream>

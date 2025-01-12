@@ -562,8 +562,6 @@
       resizable: true,
       minWidth: 1280,
       minHeight: 720,
-      maxWidth: 1920,
-      maxHeight: 1080,
       autoHideMenuBar: true,
       icon: path.join(__dirname, "app.ico"),
       
