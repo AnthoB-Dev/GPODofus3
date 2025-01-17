@@ -3,12 +3,19 @@
 ![Image du projet](https://github.com/AnthoB-Dev/GPODofus3/blob/main/staticfiles/medias/project.png)
 
 ## Mises à jour
-### Dernière : version 1.0.3
+### Dernière : version 1.0.4
+- Suite des guides. Tous les guides 120 ont été rédigés.
+- Beaucoup d'améliorations sur les guides déjà présent notamment sur les guides d'alignements.
+- Correction d'un oublie de sauvegarder l'alignement de l'utilisateur lors d'une sauvegarde de la progression.
+
+Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.4).
+
+### version 1.0.3
 - Suite des guides (assez peu cependant mais le rythme va augmenter maintenant le rush passé)
 - Beaucoup d'améliorations sur les guides déjà présent (Je remercie mon testeur Aïhoko, noob complet de Dofus, pour ses retours constructifs)
 - Et enfin une option de sauvegarde d'avancée pour ne pas perdre la progression lors d'une mise à jour de l'application.
 
-Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases).
+Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.3).
 
 ### version 1.0.2
 Apporte beaucoup de changements qualitatifs en terme de rédaction et une disposition modifiée de la structure pour une meilleure logique de lecture. 
@@ -49,6 +56,12 @@ J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de
             <li><a href="#téléchargement">Téléchargement</a></li>
             <li><a href="#installation-1">Installation</a></li>
         </ul>
+    </li>
+    <li>
+        <a href="#mise-à-jour">Mise à jour</a>
+    </li>
+    <li>
+        <a href="#désinstallation">Désinstallation</a>
     </li>
     <li>
         <a href="#utilisation">Utilisation</a>
@@ -171,6 +184,17 @@ La procédure est plus simple mais **demande un terminal d'ouvert** lorsque l'ap
     - Attention, si le script vous annonce une quelconque erreur à l'étape 1 ou 2 en lien avec les installations de Python ou Node, et qu'elle persiste après avoir relancer le script, installez manuellement Python et Node via les installateurs fournis dans le dossier "dependencies".
     - Si le script vous annonce une erreur au niveau de l'étape 3 "**Création de l'environnement virtuel**", fermez et relancez le.
 3. Lancez **run** (.bat)
+
+### Mise à jour
+Pour mettre à jour l'application, je n'ai malheureusement pour le moment, pas de meilleur système que de répéter l'étape d'installation ci-dessus (Moins l'étape de Python). Notez cependant que si vous souhaitez mettre à jour l'application ça signifie que vous l'avez utilisée et que vous ne souhaitez pas perdre votre progression.
+
+Dans ce cas, avant de lancer le setup.exe de la nouvelle version, ouvrez GPOD3 et cliquez sur l'icone d'options située en haut à droite de l'application. 
+
+Puis cliquez sur "Créer un fichier de sauvegarde".
+
+Vous pouvez maintenant lancer le setup.exe de la dernière version, pour installer la nouvelle version puis chargez votre progression avec le 2e bouton présent dans les options.
+
+Rappel : Laissez l'application se lancer d'elle même une fois le setup lancé. Même si visuellement rien ne se passe (S'il n'y a toujours rien au bout de 3 minutes alors que vous avez une connexion haut débit, consultez la rubrique [Issues](https://github.com/AnthoB-Dev/GPODofus3/issues).)
  
 ### Désinstallation 
 
