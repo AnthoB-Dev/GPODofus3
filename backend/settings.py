@@ -26,7 +26,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = "django-insecure-_c487q-rf*ar-326bj#$zp@ss1q28s56=!^=ylg9p56%jobgmc"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -142,7 +142,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Django Compressor
 COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = False
+COMPRESS_OFFLINE = True
 COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_URL = STATIC_URL
 COMPRESS_STORAGE = 'compressor.storage.CompressorFileStorage'

@@ -241,6 +241,7 @@ def create_save(request):
     try:
         # Perform the save operation
         data = []
+        
         for guide_achievement in GuideAchievement.objects.select_related('guide', 'achievement').filter(guide__is_visible=True):
             quests = AchievementQuest.objects.filter(achievement=guide_achievement.achievement).select_related('quest')
             quest_data = [
@@ -253,6 +254,16 @@ def create_save(request):
                 "quests": quest_data,
                 "is_last_seen": guide_achievement.is_last_seen,
             })
+        
+        alignment = User.objects.first().alignment.id if User.objects.exists() else None
+        global_data = {
+            "alignment": alignment
+        }
+        
+        save_content = {
+            "global": global_data,
+            "guides": data
+        }
 
         appdata_folder = os.path.join(os.environ.get('APPDATA'), 'GPODofus3')
         if not os.path.exists(appdata_folder):
@@ -268,7 +279,7 @@ def create_save(request):
             os.rename(output_file, old_save_file)
 
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+            json.dump(save_content, f, ensure_ascii=False, indent=4)
             
     except Exception as e:
         success = False
@@ -298,8 +309,10 @@ def load_save(request):
         output_file = os.path.join(appdata_folder, 'save.json')
         with open(output_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
+        
+        guides = data.get("guides", [])
 
-        for item in data:
+        for item in guides:
             try:
                 # Récupérer le Guide correspondant à l'ID
                 guide = Guide.objects.get(id=item['guide']['id'])
@@ -324,7 +337,7 @@ def load_save(request):
                 achievement=achievement,
                 defaults={'is_last_seen': item['is_last_seen']}  # Mettre à jour le champ is_last_seen
             )
-
+            
             # Mettre à jour les quêtes liées à cet achievement
             for quest_item in item['quests']:
                 try:
@@ -337,20 +350,39 @@ def load_save(request):
                 # Mettre à jour la complétion de la quête
                 quest.completed = quest_item['completed']
                 quest.save()  # Sauvegarder la quête après mise à jour
+               
+        global_data = data.get("global")
+        if not global_data:
+            return JsonResponse({'error': 'Données globales manquantes dans la sauvegarde.'}, status=400)
+
+        # Vérification de l'alignement
+        alignment_id = global_data.get("alignment")
+        if alignment_id is None:
+            return JsonResponse({'error': 'ID d\'alignement non trouvé dans la sauvegarde.'}, status=400)
+        else:
+            try:
+                # Récupérer l'alignement correspondant à l'ID
+                alignment = Alignment.objects.get(id=alignment_id)
+                user = User.objects.first()
+                if user:
+                    user.alignment = alignment
+                    user.save()
+            except Alignment.DoesNotExist:
+                print(f"Alignement avec l'ID {alignment_id} n'existe pas dans la base de données.")
+                return JsonResponse({'error': 'Alignement non trouvé dans la sauvegarde.'}, status=400)
+
                 
     except Exception as e:
         success = False
-        message = f"Une erreur s'est produite lors du chargement : {str(e)}.<br/>Vérifiez la présence de save.json à l'emplacement indiqué."
+        message = f"Une erreur s'est produite lors du chargement : {str(e)}.<br/>Solution probable : Vérifiez la présence de save.json à l'emplacement indiqué."
         print(f"Une erreur s'est produite lors du chargement : {str(e)}")
 
     if success:
-        print("Success")
         return render(request, 'sections/_messages.html', {
             'success': success,
             'message': message
         }, content_type="text/vnd.turbo-stream.html")
     else:
-        print(success, "Error")
         return render(request, 'sections/_messages.html', {
             'success': success,
             'message': message

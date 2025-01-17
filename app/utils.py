@@ -93,3 +93,18 @@ def update_guides_visibility():
         else:
             guide.is_visible = True
         guide.save()
+        
+def update_titles():
+    guides = Guide.objects.all()
+    for guide in guides:
+        if guide.title.startswith("Quêtes d'Alignement"):
+            text = guide.title
+            parts = text.split()
+            if len(parts) >= 2:
+                updated_text = "[ A ] " + parts[0] + " " + parts[1].lower() + " " + " ".join(parts[2:])
+            else:
+                # Si la chaîne contient moins de 2 mots, juste ajouter "[ A ]" devant
+                updated_text = "[ A ] " + text
+
+            guide.title = updated_text
+            guide.save()

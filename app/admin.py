@@ -72,8 +72,8 @@ class GuideAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "page",
-        "id",
         "recommended_level",
+        "alignment",
         "is_visible",
     ]
     search_fields = ("title",)
