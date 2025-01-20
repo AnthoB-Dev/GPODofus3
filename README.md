@@ -3,6 +3,22 @@
 ![Image du projet](https://github.com/AnthoB-Dev/GPODofus3/blob/main/staticfiles/medias/project.png)
 
 ## Mises à jour
+Comme indiqué dans les notes de release de la 1.0.4, je vais essayer de sortir une MàJ tous les vendredi en fin d'après midi, vers 18h. Car il serait pas mal de finir la rédaction de tous les guides, à un moment donné...
+
+### À venir : version 1.0.5
+Devrait arriver avant vendredi 18h. Pour le bien de l'application il me faut sortir cette mise à jour en dépit de la rédaction des guides.
+
+Je suis en cours de refonte total du main.js. J'ai déjà fix 2 des 3 points auquel il fallait faire attention lors de l'installation avec le setup.exe : 
+- Le besoin d'avoir Python. Dorénavant une version est intégrée ce qui a, malheureusement, alourdi l'app d'une cinquantaine de Mo.
+- Le fait que l'installateur disparaissait avant la fin de l'installation https://github.com/AnthoB-Dev/GPODofus3/issues/11, ce qui avait pour cause de faire croire que l'installation était terminée alors que ce n'était pas le cas. Ce repère reste à présent bien à toutes les étapes de l'installation jusqu'au lancer de GPOD3.
+
+Mais le boulot n'est pas terminé : 
+- J'ai encore à corriger l'installation des dépendances qui dans certains cas, encore actuellement, n'arrive jamais. Ça n'a cependant plus l'air d'être en rapport avec les permissions et le lancer en administrateur et c'est une bonne chose puisque ça devrait permettre de ne jamais avoir à lancer le setup en admin. Ceci dit, c'est encore à déterminer.
+- J'ai aussi le processus d'installation, qui ne s'interrompt pas lors d'une erreur critique, à fix. Ce qui mène à l'ouverture de la fenêtre de GPOD3 alors qu'il manque des élements cruciaux à son fonctionnement.
+
+Les axes d'améliorations que cette MàJ va me permettre d'explorer :
+- La fonctionnalité de mise à jour automatique de l'application. Mais je préfère prevenir : Ne pas s'attendre à cette fonctionnalité pour la 1.0.5. En tout cas le main.js propre va me permettre d'avancer sur cette reflexion.
+ 
 ### Dernière : version 1.0.4
 - Suite des guides. Tous les guides 120 ont été rédigés.
 - Beaucoup d'améliorations sur les guides déjà présent notamment sur les guides d'alignements.
@@ -16,9 +32,6 @@ Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.
 - Et enfin une option de sauvegarde d'avancée pour ne pas perdre la progression lors d'une mise à jour de l'application.
 
 Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.3).
-
-### version 1.0.2
-Apporte beaucoup de changements qualitatifs en terme de rédaction et une disposition modifiée de la structure pour une meilleure logique de lecture. 
 
 ## Bienvenu sur GPODofus3.
 
