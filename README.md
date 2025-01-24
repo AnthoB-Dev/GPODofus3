@@ -5,21 +5,13 @@
 ## Mises à jour
 Comme indiqué dans les notes de release de la 1.0.4, je vais essayer de sortir une MàJ tous les vendredi en fin d'après midi, vers 18h. Car il serait pas mal de finir la rédaction de tous les guides, à un moment donné...
 
-### À venir : version 1.0.5
-Devrait arriver avant vendredi 18h. Pour le bien de l'application il me faut sortir cette mise à jour en dépit de la rédaction des guides.
+### Dernière : version 1.0.5
+- Refonte totale de l'installation de GPOD3.
+- Ajout des guides de niveau 130. 
 
-Je suis en cours de refonte total du main.js. J'ai déjà fix 2 des 3 points auquel il fallait faire attention lors de l'installation avec le setup.exe : 
-- Le besoin d'avoir Python. Dorénavant une version est intégrée ce qui a, malheureusement, alourdi l'app d'une cinquantaine de Mo.
-- Le fait que l'installateur disparaissait avant la fin de l'installation https://github.com/AnthoB-Dev/GPODofus3/issues/11, ce qui avait pour cause de faire croire que l'installation était terminée alors que ce n'était pas le cas. Ce repère reste à présent bien à toutes les étapes de l'installation jusqu'au lancer de GPOD3.
-
-Mais le boulot n'est pas terminé : 
-- J'ai encore à corriger l'installation des dépendances qui dans certains cas, encore actuellement, n'arrive jamais. Ça n'a cependant plus l'air d'être en rapport avec les permissions et le lancer en administrateur et c'est une bonne chose puisque ça devrait permettre de ne jamais avoir à lancer le setup en admin. Ceci dit, c'est encore à déterminer.
-- J'ai aussi le processus d'installation, qui ne s'interrompt pas lors d'une erreur critique, à fix. Ce qui mène à l'ouverture de la fenêtre de GPOD3 alors qu'il manque des élements cruciaux à son fonctionnement.
-
-Les axes d'améliorations que cette MàJ va me permettre d'explorer :
-- La fonctionnalité de mise à jour automatique de l'application. Mais je préfère prevenir : Ne pas s'attendre à cette fonctionnalité pour la 1.0.5. En tout cas le main.js propre va me permettre d'avancer sur cette reflexion.
+Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.5).
  
-### Dernière : version 1.0.4
+### version 1.0.4
 - Suite des guides. Tous les guides 120 ont été rédigés.
 - Beaucoup d'améliorations sur les guides déjà présent notamment sur les guides d'alignements.
 - Correction d'un oublie de sauvegarder l'alignement de l'utilisateur lors d'une sauvegarde de la progression.
@@ -33,15 +25,14 @@ Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.
 
 Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.3).
 
-## Bienvenu sur GPODofus3.
 
+## Bienvenu sur GPODofus3.
 
 **GPODofus3** (*GPOD3 pour les intimes*) a été développé dans le but **d'apporter** ce qui, à mon humble avis et avec toute la **subjectivité** que cela implique, **manque** au guide du -presque- même nom de [Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548).
 
 **N'hésitez pas** à mettre une **étoile** sur [le Github du projet](https://github.com/AnthoB-Dev/GPODofus3) si vous **appréciez** l'application, ou simplement si l'**initiative** vous interesse.
 J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de qualité de vie, d'optimisations structurelles de l'application, et bien plus !
 
-- **<span style="color:red;">LIRE ATTENTIVEMENT LA SECTION INSTALLATION SVP.</span>**
 - **<span style="color:red;">Ne supporte que Windows pour le moment.</span>**
 
 
@@ -171,9 +162,6 @@ Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **rédu
 
 
 ## Installation
-**<span style="color:red;">LIRE ATTENTIVEMENT CETTE SECTION SVP</span>**
-
-Notez qu'il n'y a pour l'instant pas de moyen de mettre à jour l'application automatiquement. Il faut donc répéter presque toute les étapes présentes ci-dessous à chaque fois.
 
 ### Téléchargement
 À droite de cette page, section **Release** latest ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases).
@@ -181,41 +169,22 @@ Tout en bas de la Release la section "Assets".
 
 ### Installation
 #### Via l'installateur
-Faites **<span style="color: red;">attention à 3 points</span>** avec l'installateur :
-
-1. Vous **<span style="color: red;">DEVEZ</span>** télécharger [Python 3.13](https://www.python.org/downloads/release/python-3130/) et l'installer.
-    - Lorsque l'installateur Python s'ouvre, sélectionnez bien "<span style="color: red;">Ajouter Python au Path</span>" ainsi qu'en <span style="color: red;">privilège administrateur</span>. Ceci devrait vous évitez de relancer votre session (ou redémarrer l'ordi).
-2. Une fois **Python installé**, vous pouvez lancer le **Setup.exe** mais attention sur un point : Lorsque non lancer en administrateur, il est possible que les dépendances ne s'installent pas correctement. Si c'est votre cas, lancer le **Setup.exe en administrateur** devrait résoudre le problème.
-    - J'utilise le conditionnel car sur les 5 machines où a été tester l'application, il y en a une pour laquelle le lancement en admin n'a pas fonctionné. Je ne connais pas la raison et j'ai manqué de temps pour la trouver. Si c'est votre cas, malheureusement vous ne pourrez pas utiliser **GPODofus3**, je m'en excuse.
-3. L'installateur **se ferme AVANT la fin de l'installation**. Attendez bien que la fenêtre de l'application s'ouvre d'elle même. L'attente dépendra de la vitesse de votre connexion mais comptez au minimum **30 secondes**.
+Lancez le Setup.exe.
 
 #### Avec le source code (zip)
-La procédure est plus simple mais **demande un terminal d'ouvert** lorsque l'application est lancée : 
-
-1. Dézippez le dossier où vous voulez.
-2. Lancez **install** (.vbs)
-    - Attention, si le script vous annonce une quelconque erreur à l'étape 1 ou 2 en lien avec les installations de Python ou Node, et qu'elle persiste après avoir relancer le script, installez manuellement Python et Node via les installateurs fournis dans le dossier "dependencies".
-    - Si le script vous annonce une erreur au niveau de l'étape 3 "**Création de l'environnement virtuel**", fermez et relancez le.
-3. Lancez **run** (.bat)
+Je ne supporte pour l'instant plus l'utilisation via source code.
 
 ### Mise à jour
-Pour mettre à jour l'application, je n'ai malheureusement pour le moment, pas de meilleur système que de répéter l'étape d'installation ci-dessus (Moins l'étape de Python). Notez cependant que si vous souhaitez mettre à jour l'application ça signifie que vous l'avez utilisée et que vous ne souhaitez pas perdre votre progression.
-
-Dans ce cas, avant de lancer le setup.exe de la nouvelle version, ouvrez GPOD3 et cliquez sur l'icone d'options située en haut à droite de l'application. 
-
-Puis cliquez sur "Créer un fichier de sauvegarde".
-
-Vous pouvez maintenant lancer le setup.exe de la dernière version, pour installer la nouvelle version puis chargez votre progression avec le 2e bouton présent dans les options.
-
-Rappel : Laissez l'application se lancer d'elle même une fois le setup lancé. Même si visuellement rien ne se passe (S'il n'y a toujours rien au bout de 3 minutes alors que vous avez une connexion haut débit, consultez la rubrique [Issues](https://github.com/AnthoB-Dev/GPODofus3/issues).)
+Pour mettre à jour l'application vous devez :
+1. Sauvegarder votre progression depuis les options de GPOD3.
+2. Télécharger et installer le Setup.exe de la nouvelle version.
+3. Charger sa sauvegarde depuis les options de GPOD3.
  
 ### Désinstallation 
 
 #### Si installé via Setup.exe
 Vous pouvez supprimer l'application depuis "**Ajouter ou supprimer des programmes**" sous Windows.
 
-#### Si via source code (zip)
-Simplement **supprimer le dossier** où vous l'avez décompressé, et si vous le souhaitez, désinstallez **Python** puis **Node** depuis "Ajouter ou supprimer des programmes" sous Windows. 
 
 ## Utilisation
 Le tout premier Guide de l'application est un guide tutoriel expliquant "qui fait quoi" dans l'application. Je vous invite donc à vous rendre sur celui-ci lorsque vous avez un questionnement quelconque sur les fonctionnalités de l'app.

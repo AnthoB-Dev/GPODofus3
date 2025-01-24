@@ -1,0 +1,137 @@
+:root {
+  --clr-primary: #dedabd;
+  --clr-secondary-one: #edff00;
+  --clr-secondary-two: #7ea105;
+  --clr-secondary-three: #5f8a2a;
+  --clr-secondary: linear-gradient(
+    180deg,
+    var(--clr-secondary-one) 0%,
+    var(--clr-secondary-two) 50%,
+    var(--clr-secondary-three) 100%
+  );
+  --clr-text: #181717;
+  --clr-green: #198309;
+  --clr-orange: #dea325;
+  --clr-red: #eb2126;
+}
+
+@font-face {
+  font-family: "Roboto-regular";
+  src: url("../fonts/Roboto-Regular.ttf");
+};
+
+@font-face {
+  font-family: "Roboto-bold";
+  src: url("../fonts/Roboto-Bold.ttf");
+};
+
+h1 {
+  font-family: "Roboto-bold";
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  text-decoration: none;
+  scrollbar-color: #7ea10557 #00000000;
+  scrollbar-width: thin;
+  user-select: none;
+  font-family: "Roboto-regular";
+}
+
+html {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#installer {
+  background: var(--clr-primary);
+  position: relative;
+  overflow: hidden;
+  border: solid 3px white;
+  border-radius: 8px;
+}
+
+#installer #installer-title {
+  background: var(--clr-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  color: var(--clr-text);
+  font-size: 1.6em;
+  padding: 15px 100px;
+  /* border-bottom: solid 2px white; */
+  border-radius: 8px;
+  /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25); */
+}
+
+#installer #installer-title #installer-dots::after {
+  content: ' .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+#installer-background {
+  position: absolute;
+  left: 0;
+  top: 0;    
+  margin: 0 10px;
+  height: 100%;
+  width: -webkit-fill-available;
+  background: hsla(53, 33%, 81%, 0.1);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  z-index: 1;
+}
+
+#installer-content {
+  padding: 10px 20px;
+  color: #333333;
+  font-size: 1.2em;
+  position: inherit;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+#scroll {
+  overflow: auto;
+}
+
+.success {
+  color: var(--clr-green);
+}
+
+.failed {
+  color: var(--clr-red);
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  40% {
+    color: white;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  60% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 rgba(0,0,0,0);}
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 white;}}
