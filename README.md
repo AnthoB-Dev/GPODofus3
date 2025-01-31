@@ -7,7 +7,7 @@ MàJ tous les vendredi 18h (environ) jusqu'à ce que tous les guides soient réd
 
 ### Dernière : version 1.0.6
 - Grosse percée dans la rédaction avec tous les guides de niveaux 140, 150 et 160.
-- Quelques modifications sur le guide 120 - Frigost : Le Royalmouth.
+- Des modifications sur les guides précédents.
 
 Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.6).
 
