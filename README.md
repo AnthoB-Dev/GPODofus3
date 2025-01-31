@@ -3,9 +3,15 @@
 ![Image du projet](https://github.com/AnthoB-Dev/GPODofus3/blob/main/staticfiles/medias/project.png)
 
 ## Mises à jour
-Comme indiqué dans les notes de release de la 1.0.4, je vais essayer de sortir une MàJ tous les vendredi en fin d'après midi, vers 18h. Car il serait pas mal de finir la rédaction de tous les guides, à un moment donné...
+MàJ tous les vendredi 18h (environ) jusqu'à ce que tous les guides soient rédigés.
 
-### Dernière : version 1.0.5
+### Dernière : version 1.0.6
+- Grosse percée dans la rédaction avec tous les guides de niveaux 140, 150 et 160.
+- Quelques modifications sur le guide 120 - Frigost : Le Royalmouth.
+
+Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.6).
+
+### version 1.0.5
 - Refonte totale de l'installation de GPOD3.
 - Ajout des guides de niveau 130. 
 
@@ -17,13 +23,6 @@ Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.
 - Correction d'un oublie de sauvegarder l'alignement de l'utilisateur lors d'une sauvegarde de la progression.
 
 Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.4).
-
-### version 1.0.3
-- Suite des guides (assez peu cependant mais le rythme va augmenter maintenant le rush passé)
-- Beaucoup d'améliorations sur les guides déjà présent (Je remercie mon testeur Aïhoko, noob complet de Dofus, pour ses retours constructifs)
-- Et enfin une option de sauvegarde d'avancée pour ne pas perdre la progression lors d'une mise à jour de l'application.
-
-Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.3).
 
 
 ## Bienvenu sur GPODofus3.
@@ -37,46 +36,21 @@ J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de
 
 
 ## Sommaire
-<ul>
-    <li>
-        <a href="#présentations">Présentations</a>
-    </li>
-    <li>
-        <a href="#le-guide-de-progression-optimisée-de-skyzio">Le guide de progression optimisée de Skyzio</a>
-        <ul>
-            <li><a href="#les-défauts-qui-mont-inspirés">Les défauts qui m'ont inspirés</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#guide-de-progression-optimisée-dofus-3-1">Le Guide de Progression Optimisée: Dofus 3</a>
-        <ul>
-            <li><a href="#ce-quapporte-gpod3">Ce qu'apporte GPOD3</a></li>
-            <li><a href="#ce-que-ça-napporte-pas">Ce que ça n'apporte pas</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#installation">Installation</a>
-        <ul>
-            <li><a href="#téléchargement">Téléchargement</a></li>
-            <li><a href="#installation-1">Installation</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#mise-à-jour">Mise à jour</a>
-    </li>
-    <li>
-        <a href="#désinstallation">Désinstallation</a>
-    </li>
-    <li>
-        <a href="#utilisation">Utilisation</a>
-    </li>
-    <li>
-        <a href="#remerciements">Remerciements</a>
-    </li>
-    <li>
-        <a href="#contact">Contact</a>
-    </li>
-</ul>
+- <a href="#présentations">Présentations</a>
+- <a href="#le-guide-de-progression-optimisée-de-skyzio">Le guide de progression optimisée de Skyzio</a>
+    - <a href="#les-défauts-qui-mont-inspirés">Les défauts qui m'ont inspirés</a>
+- <a href="#guide-de-progression-optimisée-dofus-3-1">Le Guide de Progression Optimisée: Dofus 3</a>
+    - <a href="#ce-quapporte-gpod3">Ce qu'apporte GPOD3</a>
+    - <a href="#ce-que-ça-napporte-pas">Ce que ça n'apporte pas</a>
+- <a href="#installation">Installation</a>
+    - <a href="#téléchargement">Téléchargement</a>
+    - <a href="#installation-1">Installation</a>
+- <a href="#mise-à-jour">Mise à jour</a>
+- <a href="#désinstallation">Désinstallation</a>
+- <a href="#utilisation">Utilisation</a>
+- <a href="#remerciements">Remerciements</a>
+- <a href="#contact">Contact</a>
+
 
 
 ## Présentations
@@ -164,12 +138,11 @@ Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **rédu
 ## Installation
 
 ### Téléchargement
-À droite de cette page, section **Release** latest ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases).
-Tout en bas de la Release la section "Assets".
+- À droite de cette page, section **Release** latest ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases). Puis tout en bas de la Release la section "Assets".
 
 ### Installation
 #### Via l'installateur
-Lancez le Setup.exe.
+- Lancez le Setup.exe.
 
 #### Avec le source code (zip)
 Je ne supporte pour l'instant plus l'utilisation via source code.
@@ -183,7 +156,7 @@ Pour mettre à jour l'application vous devez :
 ### Désinstallation 
 
 #### Si installé via Setup.exe
-Vous pouvez supprimer l'application depuis "**Ajouter ou supprimer des programmes**" sous Windows.
+- Vous pouvez supprimer l'application depuis "**Ajouter ou supprimer des programmes**" sous Windows.
 
 
 ## Utilisation
@@ -192,13 +165,13 @@ Le tout premier Guide de l'application est un guide tutoriel expliquant "qui fai
 
 ## Remerciements
 Je vais évidemment commencer par remercier **Ankama Games** pour cet incroyable univers qu'est Dofus. On a grandit avec, le temps passe... Nous l'aimons voir le detestont... et pourtant nous sommes encore là. 
-Je souhaite toute la réussite possible à Dofus 3 en esperant que ce soit le début d'une nouvelle jeunesse pour cet ancien du jeux vidéo qu'est Dofus (mais attention, le jour où Dofus commence à perdre son âme, ça va barder)
+Je souhaite toute la réussite possible à Dofus 3 en esperant que ce soit le début d'une nouvelle jeunesse pour cet ancien du jeux vidéo qu'est Dofus (Mais attention à ne pas faire n'importe quoi non plus).
 
-Ensuite à **Skyzio** pour avoir mis à disposition de la communauté un guide qui a assurément demander des mois de travail. 
+Ensuite à **Skyzio** pour avoir mis à disposition de la communauté un guide qui a assurément demandé des mois de travail. 
 Merci à toi, je vais enfin pouvoir jouer de façon plus optimale (et mettre les mains sur autre chose que le Cawotte !)
 
-Et enfin, à **toi** l'utilisateur de cette application. Ou bien **toi** qui envisagerait de l'utilisée.
-Je vous remercie d'être les premiers utilisateurs hors entourage à utiliser une de mes création.
+Et enfin, à **toi** l'utilisateur de cette application. Ou bien **toi** qui envisagerait de l'utiliser.
+Je vous remercie d'être les premiers utilisateurs hors entourage à utiliser une de mes créations.
 
 
 ## Contact
@@ -206,3 +179,5 @@ Pour tout contact au sujet de l'application, vous pouvez :
 - Me mp sur Discord : **shiinasan.**
 - M'envoyer un email : **bonis.anthony.dev@gmail.com**
 - Ou bien me mp sur le serveur Brial 2 : **/w Fecashiina GPOD3 -**
+
+Certaines illustrations sont la propriété d'Ankama Games, d'autre de <a href="https://icones8.fr/">Icones8</a> - Tous droits réservés.

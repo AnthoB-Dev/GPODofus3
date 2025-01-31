@@ -247,6 +247,16 @@ body {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  position: relative;
+
+  &::after {
+    content: "Certaines illustrations sont la propriété d'Ankama Games, d'autres de Icones8 - Tous droits réservés.";
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: #ffffffa3;
+  }
 
   #theme-emeraude {
     --clr-primary: @clr-primary;
