@@ -5,6 +5,11 @@
 ## Mises à jour
 MàJ tous les vendredi 18h (environ) jusqu'à ce que tous les guides soient rédigés.
 
+### Suivante : version 1.0.7
+Devrait arriver avant 19h, navré pour ce retard.
+- Ajout des guides de niveau 170 et 180.
+- Beuacoup d'améliorations dans les guides les plus anciens.
+
 ### Dernière : version 1.0.6
 - Grosse percée dans la rédaction avec tous les guides de niveaux 140, 150 et 160.
 - Des modifications sur les guides précédents.
