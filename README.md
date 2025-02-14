@@ -5,12 +5,14 @@
 ## Mises à jour
 MàJ tous les vendredi 18h (environ) jusqu'à ce que tous les guides soient rédigés.
 
-### Suivante : version 1.0.7
-Devrait arriver avant 19h, navré pour ce retard.
+### Dernière : version 1.0.7
+Navré pour ces deux semaines d'attentes. Je ne reviens pas les mains vides, je vous rassure.
 - Ajout des guides de niveau 170 et 180.
-- Beuacoup d'améliorations dans les guides les plus anciens.
+- Beaucoup d'améliorations dans les guides les plus anciens et notamment sur la section Objectifs. Voir détails dans les changelogs de la release.
 
-### Dernière : version 1.0.6
+Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.7).
+
+### version 1.0.6
 - Grosse percée dans la rédaction avec tous les guides de niveaux 140, 150 et 160.
 - Des modifications sur les guides précédents.
 
@@ -21,14 +23,6 @@ Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.
 - Ajout des guides de niveau 130. 
 
 Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.5).
- 
-### version 1.0.4
-- Suite des guides. Tous les guides 120 ont été rédigés.
-- Beaucoup d'améliorations sur les guides déjà présent notamment sur les guides d'alignements.
-- Correction d'un oublie de sauvegarder l'alignement de l'utilisateur lors d'une sauvegarde de la progression.
-
-Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.4).
-
 
 ## Bienvenu sur GPODofus3.
 
