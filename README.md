@@ -20,6 +20,8 @@ J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de
     - <a href="#ce-quapporte-gpod3">Ce qu'apporte GPOD3</a>
     - <a href="#ce-que-ça-napporte-pas">Ce que ça n'apporte pas</a>
 - <a href="#installation">Installation</a>
+    - <a href="#via-installateur">Via installateur</a>
+    - <a href="#via-source-code">Via source code</a>
 - <a href="#désinstallation">Désinstallation</a>
 - <a href="#utilisation">Utilisation</a>
 - <a href="#remerciements">Remerciements</a>
@@ -109,13 +111,65 @@ Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **rédu
 
 
 ## Installation
+
+### Via installateur
+Pour une expérience "application de bureau" comme je l'ai pensé initialement.
+
 1. Téléchargez le Setup.exe dans la section **Release** latest (**1.1**) ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases). Puis tout en bas de la Release la section "Assets".
 2. Puis lancez le Setup.exe pour installer GPOD3.
 
+##### L'installation peut prendre plusieurs minutes selon votre connexion internet et/ou vitesse d'écriture de votre stockage.
+
+### Via source code
+Si vous souhaitez utiliser une version "navigateur" ou simplement ne pas installer d'applications inconnues :
+
+#### Prérequis
+- [**NodeJS**](https://nodejs.org/fr/download) en version **≥ 22.13.0**. (Utilisez le "**Windows Installateur (.msi)**" pour une installation simple et rapide. Présent en bas de la page "download" sur le site de nodejs)
+- [**Python**](https://www.python.org/downloads/) en version **≥ 3.13.0**. (**N'oubliez pas "d'ajouter au PATH" lors de l'installation Python.**)
+
+
+#### Installation
+##### Notez que si vous venez d'installer les prérequis, un redémarrage pourrait être nécessaire pour que les commandes ci-dessous fonctionnent.
+
+1. Téléchargez le "**Source code (zip)**" dans la section **Release** latest (**1.1**) ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases). Puis tout en bas de la Release la section "Assets".
+2. Dézippez le où vous le souhaitez.
+3. Cliquez droit sur le dossier **GPODofus3-1.1.0** que vous venez de dézipper puis cliquez sur **Ouvrir dans le Terminal**. 
+Admettons que vous l'ayez dézipper dans "**Téléchargement**", vous devriez voir :
+
+```powershell
+PS C:\Users\{Username}\Downloads\GPODofus3-1.1.0>
+```
+4. Éxécutez la commande :
+```javascript
+npm install 
+```
+
+5. Puis la commande :
+```python
+pip install -r requirements.txt
+```
+
+6. Enfin lancez le serveur :
+```python 
+py manage.py runserver
+```
+
+7. Vous devriez voir : 
+```powershell
+Django version 5.0.10, using settings 'backend.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+```
+##### Faites un CTRL clique sur http://127.0.0.1:8000/ dans votre terminal pour ouvrir la fenêtre sur votre navigateur.
+##### NE FERMEZ PAS LE TERMINAL tant que vous utilisez GPOD3.
  
 ## Désinstallation 
+### Si vous avez installé GPOD3 via :
+#### L'installateur :
 - Désinstallez GPODofus3 depuis "**Ajouter ou supprimer des programmes**" sous Windows.
 
+#### Le source code :
+- Supprimez simplement le dossier que vous avez dézippez lors de l'installation.
 
 ## Utilisation
 Le tout premier Guide de l'application est un guide tutoriel expliquant "qui fait quoi" dans l'application. Je vous invite donc à vous rendre sur celui-ci lorsque vous avez un questionnement quelconque sur les fonctionnalités de l'app.
