@@ -161,7 +161,10 @@ Starting development server at http://127.0.0.1:8000/
 Quit the server with CTRL-BREAK.
 ```
 ##### Faites un CTRL clique sur http://127.0.0.1:8000/ dans votre terminal pour ouvrir la fenêtre sur votre navigateur.
-##### NE FERMEZ PAS LE TERMINAL tant que vous utilisez GPOD3.
+
+#### Remarques
+- **NE FERMEZ PAS LE TERMINAL** tant que vous utilisez GPOD3.
+- Si vous utilisez un écran **2k ou plus**, vous allez devoir faire un **CTRL + molette vers le haut** pour zoomer car l'application à été pensée pour être une fenêtre de résolution **1600x900** max. Je confesse ne pas m'être occupé des [media queries](https://developer.mozilla.org/fr/docs/Web/CSS/CSS_media_queries/Using_media_queries) pour la version navigateur.
  
 ## Désinstallation 
 ### Si vous avez installé GPOD3 via :
