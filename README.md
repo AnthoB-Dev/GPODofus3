@@ -108,12 +108,12 @@ Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **rédu
 - **Tout ce qu'un bon dev aurait pu ajouté, et tout ce que je n'ai pas encore ajouté**.
 
 
-### Installation
+## Installation
 1. Téléchargez le Setup.exe dans la section **Release** latest (**1.1**) ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases). Puis tout en bas de la Release la section "Assets".
 2. Puis lancez le Setup.exe pour installer GPOD3.
 
  
-### Désinstallation 
+## Désinstallation 
 - Désinstallez GPODofus3 depuis "**Ajouter ou supprimer des programmes**" sous Windows.
 
 
