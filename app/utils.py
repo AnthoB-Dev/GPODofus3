@@ -85,11 +85,49 @@ def calculate_completion_percentage(achievement, user_alignment, guide):
     
     return int((completed_quests_count / total_quests_count * 100)) if total_quests_count > 0 else 0
 
-def update_guides_visibility(): 
-    guides = Guide.objects.all()
+
+"""
+    Change la visibilité des guides selon guide.page.
+    
+    :param starting_page: La page du début, starting_page compris.
+    :param ep: La page de fin, ep (ending_page) compris (optionnel).
+    :param v: Visibilité (default = True).
+"""
+def update_guides_visibility(starting_page, ep=None, v=True):
+    guides = Guide.objects.filter(page__gte=starting_page)
+    if ep is not None:
+        guides = guides.filter(page__lte=ep)
     for guide in guides:
-        if guide.page > 51:
-            guide.is_visible = False
-        else:
-            guide.is_visible = True
+        guide.is_visible = v
         guide.save()
+        
+        
+def count_guides(guide_level=0, visible=None):
+    guides = Guide.objects.all();
+    count = 0
+    result = ""
+    
+    if guide_level == 0:
+        print(f"Il y a {guides.count()} guides.");
+    else :
+        for guide in guides:
+            if visible == None:
+                if guide.recommended_level and guide.recommended_level == guide_level:
+                    count += 1;
+                result = f"{count} guides de niveau {guide_level}.";
+            
+            elif visible == False:
+                if guide.recommended_level and guide.recommended_level == guide_level and guide.is_visible == False:
+                    count += 1;
+                result = f"{count} guides non visibles de niveau {guide_level}.";
+            
+            elif visible == True:
+                if guide.recommended_level and guide.recommended_level == guide_level and guide.is_visible == True:
+                    count += 1;
+                result = f"{count} guides visibles de niveau {guide_level}.";
+            
+            else:
+                count += 1;
+                result = f"{count} guides visibles de niveau {guide_level}.";
+                
+        print(result);

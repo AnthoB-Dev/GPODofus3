@@ -137,7 +137,7 @@ class Guide(models.Model):
     important_info = models.TextField("Informations importantes", null=True, blank=True)
     explanations = models.TextField("Guide", null=True, blank=True)
     page = models.FloatField()
-    recommended_level = models.IntegerField(verbose_name="Niveau recommandé")
+    recommended_level = models.IntegerField(verbose_name="Niveau recommandé", null=True, blank=True)
     alignment = models.ForeignKey(
         Alignment,
         on_delete=models.CASCADE,

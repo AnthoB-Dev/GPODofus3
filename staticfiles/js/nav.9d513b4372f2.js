@@ -130,6 +130,11 @@ const createOptionsModal = () => {
         const gearIcon = document.querySelector('#gear');
         const createSaveUrl = gearIcon.getAttribute('data-create-save-url');
         const loadSaveUrl = gearIcon.getAttribute('data-load-save-url');
+        const isLinux = navigator.userAgent.includes('Linux');
+        const winPath = "\\AppData\\Roaming\\GPODofus3\\saves";
+        const linuxPath = "/home/.config/GPODofus3/saves";
+        let savesPath = winPath;
+        if (isLinux) { savesPath = linuxPath };
 
         // Création du conteneur & background 50% black
         const background = document.createElement('div');
@@ -193,6 +198,7 @@ const createOptionsModal = () => {
         // Création de l'option de sauvegarde du setting sauvegarde
         const settingSaveO1 = document.createElement('a');
         settingSaveO1.id = "option-save";
+        settingSaveO1.classList.add("confirmDelete");
         settingSaveO1.setAttribute('data-turbo-stream', '');
         settingSaveO1.setAttribute('data-turbo-method', 'post');
         settingSaveO1.href = createSaveUrl;
@@ -207,7 +213,8 @@ const createOptionsModal = () => {
         o1Title.innerText = "Créer un fichier de sauvegarde";
         const o1UnderTitle = document.createElement('p');
         o1UnderTitle.classList.add('settingDescription');
-        o1UnderTitle.innerHTML = "Créer un fichier dans AppData\\Roaming\\GPODofus3 qui sauvegarde la progression des quêtes.<br/>À utiliser avant de mettre à jour l’application. Chaque nouvelle sauvegarde remplace l'ancienne mais l'avant dernière est gardée en étant renommée old_save. En cas de problèmes avec la dernière sauvegarde, rennomez old_save en save pour revenir en arrière.";
+        
+        o1UnderTitle.innerHTML = `Créer un fichier dans ${savesPath} qui sauvegarde la progression générale.<br/>À utiliser avant de mettre à jour l’application. Chaque nouvelle sauvegarde remplace l'ancienne mais l'avant dernière est gardée en étant renommée old_save. En cas de problèmes avec la dernière sauvegarde, rennomez le fichier de sauvegarde '<em>old_save-</em>' en '<em>save-</em>' pour revenir en arrière.`;;
     
         o1TextsContainer.appendChild(o1Title);
         o1TextsContainer.appendChild(o1UnderTitle);
@@ -234,7 +241,7 @@ const createOptionsModal = () => {
         o2Title.innerText = "Charger la sauvegarde";
         const o2UnderTitle = document.createElement('p');
         o2UnderTitle.classList.add('settingDescription');
-        o2UnderTitle.innerHTML = "Charge le fichier de sauvegarde situé à l’emplacement AppData\\Roaming\\GPODofus3.<br/>À utiliser une fois l’application mise à jour.";
+        o2UnderTitle.innerHTML = `Charge le fichier de sauvegarde situé à l’emplacement ${savesPath}.<br/>À utiliser une fois l’application mise à jour.`;
     
         o2TextsContainer.appendChild(o2Title);
         o2TextsContainer.appendChild(o2UnderTitle);
@@ -478,11 +485,19 @@ const removePageNavEventListeners = () => {
  */
 const addOptionsListeners = () => {
     const optionsCloseBtn = document.querySelector('#optionsCloseBtn');
+    const confirmDelete = document.querySelector('#option-save');
     // const backgroundModal = document.querySelector('.optionModalBackground');
 
     optionsCloseBtn.addEventListener('click', () => {
         closeOptionsModal();
     });
+
+    confirmDelete.addEventListener('click', (e) => {
+        const confirmSave = confirm("Êtes-vous sûr de vouloir créer un fichier de sauvegarde ? Le fichier précédent sera renommé en old_save.");
+        if (!confirmSave) {
+            e.preventDefault();
+        }
+    })
 
     // backgroundModal.addEventListener('click', () => {
     //     closeOptionsModal();

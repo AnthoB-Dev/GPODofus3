@@ -10,7 +10,7 @@
   <div class="overflow overflowClose">
     {% for guide in guides %}
     <div class="guide-item" data-guide-id="{{guide.id}}" data-url="{% url 'app:guide_detail' guide.id %}">
-      Nv.{{ guide.recommended_level }} -
+      Nv.{{ guide.recommended_level |default:"0" }} -
       {{ guide.title }}
     </div>
     {% endfor %}

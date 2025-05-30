@@ -1,5 +1,7 @@
+import glob
 import json
 import os
+from datetime import datetime
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
@@ -22,16 +24,20 @@ ADMIN_FILTER_IDS = [1, 2, 3, 4]
 ALIGNED_FILTER_IDS = [3, 4]
 
 
-def redirect_to_guide(request):
-    # Récupérer le dernier guide vu
-    last_guide = Guide.objects.filter(is_last_seen=True).first()
-
-    if last_guide:
-        return redirect("app:guide_detail", guide_id=last_guide.id)
+def redirect_to_guide(request, guide_id=None):
+    # Récupère le guide passé en paramètre s'il y en a.
+    if guide_id:
+        print(guide_id)
+        gid = guide_id
     else:
-        # Rediriger vers un guide par défaut si aucun n'est trouvé
-        return redirect("app:guide_detail", guide_id=1)
+    # Redirige vers le dernier guide vu ou un guide par défaut (Le premier) si aucun n'est trouvé.
+        gid = Guide.objects.filter(is_last_seen=True).first()
+        if not gid:
+            gid = 1
+        else:
+            gid = gid.id
 
+    return redirect("app:guide_detail", guide_id=gid)
 
 class GuideDetailView(View):
     def get(self, request, guide_id):
@@ -239,7 +245,6 @@ def create_save(request):
     message = "La sauvegarde a été créée avec succès."  
     
     try:
-        # Perform the save operation
         data = []
         
         for guide_achievement in GuideAchievement.objects.select_related('guide', 'achievement').filter(guide__is_visible=True):
@@ -256,8 +261,11 @@ def create_save(request):
             })
         
         alignment = User.objects.first().alignment.id if User.objects.exists() else None
+        last_guide = Guide.objects.filter(is_last_seen=True).first().id
+        
         global_data = {
-            "alignment": alignment
+            "alignment": alignment,
+            "last_guide": last_guide
         }
         
         save_content = {
@@ -265,12 +273,24 @@ def create_save(request):
             "guides": data
         }
 
-        appdata_folder = os.path.join(os.environ.get('APPDATA'), 'GPODofus3')
-        if not os.path.exists(appdata_folder):
-            os.makedirs(appdata_folder)
+        saves_folder = os.path.join(os.environ.get('APPDATA'), 'GPODofus3', 'saves')
+        if not os.path.exists(saves_folder):
+            os.makedirs(saves_folder)
+            
+        with open("package.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+            
+        app_version = data.get("version")
+        timestamp = datetime.now().strftime("%d_%m_%Y")
+        
+        save_name = f"save-{app_version}-{timestamp}.json"
 
-        output_file = os.path.join(appdata_folder, 'save.json')
-        old_save_file = os.path.join(appdata_folder, 'old_save.json')
+        output_file = os.path.join(saves_folder, save_name)
+        old_save_file = os.path.join(saves_folder, f'old_{save_name}')
+        
+        # Mettre en place une verification de fichiers qui commencent par "save-" et "old_save-"
+        # Il ne peut y avoir qu'une seul "save-"
+        # Il peut y avoir jusqu'à 5 "old_save-"
 
         if os.path.exists(old_save_file):
             os.remove(old_save_file)
@@ -305,10 +325,19 @@ def load_save(request):
     
     try:
         # Charger les données depuis le fichier JSON présent dans le dossier AppData\Roaming\GPODofus3
-        appdata_folder = os.path.join(os.environ.get('APPDATA'), 'GPODofus3')
-        output_file = os.path.join(appdata_folder, 'save.json')
-        with open(output_file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        saves_folder = os.path.join(os.environ.get('APPDATA'), 'GPODofus3', 'saves')
+        save_files = glob.glob(os.path.join(saves_folder, "save-*.json"))
+
+        if save_files:
+            save_file = save_files[0]
+
+            # Charger le fichier JSON
+            with open(save_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            print("Fichier chargé:", save_file)
+        else:
+            print("Aucun fichier 'save-' trouvé dans", saves_folder)
         
         guides = data.get("guides", [])
 
@@ -317,14 +346,14 @@ def load_save(request):
                 # Récupérer le Guide correspondant à l'ID
                 guide = Guide.objects.get(id=item['guide']['id'])
             except Guide.DoesNotExist:
-                print(f"Guide avec l'ID {item['guide']['id']} n'existe pas dans la base de données.")
+                print(f"Guide avec l'ID {item['guide']['id']} n'existe pas ou plus dans la base de données.")
                 continue  # Ignore cet élément si le guide n'existe pas
 
             try:
                 # Récupérer l'achievement correspondant à l'ID
                 achievement = Achievement.objects.get(id=item['achievement']['id'])
             except Achievement.DoesNotExist:
-                print(f"Achievement avec l'ID {item['achievement']['id']} n'existe pas dans la base de données.")
+                print(f"Achievement avec l'ID {item['achievement']['id']} n'existe pas ou plus dans la base de données.")
                 continue  # Ignore cet élément si l'achievement n'existe pas
 
             # Si un GuideAchievement avec is_last_seen=True existe déjà pour ce guide, le réinitialiser
@@ -370,6 +399,10 @@ def load_save(request):
             except Alignment.DoesNotExist:
                 print(f"Alignement avec l'ID {alignment_id} n'existe pas dans la base de données.")
                 return JsonResponse({'error': 'Alignement non trouvé dans la sauvegarde.'}, status=400)
+                
+        guide_last_seen = global_data.get("last_guide")
+        if guide_last_seen is None:
+            guide_last_seen = 1
 
                 
     except Exception as e:
@@ -378,12 +411,12 @@ def load_save(request):
         print(f"Une erreur s'est produite lors du chargement : {str(e)}")
 
     if success:
-        return render(request, 'sections/_messages.html', {
-            'success': success,
-            'message': message
-        }, content_type="text/vnd.turbo-stream.html")
+        return redirect_to_guide(request, guide_last_seen)
+        
     else:
         return render(request, 'sections/_messages.html', {
             'success': success,
             'message': message
         }, content_type="text/vnd.turbo-stream.html")
+    
+    

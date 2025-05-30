@@ -2,28 +2,6 @@
 
 ![Image du projet](https://github.com/AnthoB-Dev/GPODofus3/blob/main/staticfiles/medias/project.png)
 
-## Mises à jour
-MàJ tous les vendredi 18h (environ) jusqu'à ce que tous les guides soient rédigés.
-
-### Dernière : version 1.0.7
-Navré pour ces deux semaines d'attentes. Je ne reviens pas les mains vides, je vous rassure.
-- Ajout des guides de niveau 170 et 180.
-- Beaucoup d'améliorations dans les guides les plus anciens et notamment sur la section Objectifs. Voir détails dans les changelogs de la release.
-
-Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.7).
-
-### version 1.0.6
-- Grosse percée dans la rédaction avec tous les guides de niveaux 140, 150 et 160.
-- Des modifications sur les guides précédents.
-
-Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.6).
-
-### version 1.0.5
-- Refonte totale de l'installation de GPOD3.
-- Ajout des guides de niveau 130. 
-
-Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.0.5).
-
 ## Bienvenu sur GPODofus3.
 
 **GPODofus3** (*GPOD3 pour les intimes*) a été développé dans le but **d'apporter** ce qui, à mon humble avis et avec toute la **subjectivité** que cela implique, **manque** au guide du -presque- même nom de [Skyzio](https://docs.google.com/spreadsheets/d/1X7rrozrDZDepncPr8AZXV7oLT_xEa6dkASjLmVFOLwA/edit?gid=1858873548#gid=1858873548).
@@ -31,7 +9,7 @@ Détails dans [Release](https://github.com/AnthoB-Dev/GPODofus3/releases/tag/v1.
 **N'hésitez pas** à mettre une **étoile** sur [le Github du projet](https://github.com/AnthoB-Dev/GPODofus3) si vous **appréciez** l'application, ou simplement si l'**initiative** vous interesse.
 J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de qualité de vie, d'optimisations structurelles de l'application, et bien plus !
 
-- **<span style="color:red;">Ne supporte que Windows pour le moment.</span>**
+- **<span style="color:red;">Ne supporte que Windows.</span>**
 
 
 ## Sommaire
@@ -42,14 +20,10 @@ J'ai déjà en tête des axes d'améliorations en termes de fonctionnalités, de
     - <a href="#ce-quapporte-gpod3">Ce qu'apporte GPOD3</a>
     - <a href="#ce-que-ça-napporte-pas">Ce que ça n'apporte pas</a>
 - <a href="#installation">Installation</a>
-    - <a href="#téléchargement">Téléchargement</a>
-    - <a href="#installation-1">Installation</a>
-- <a href="#mise-à-jour">Mise à jour</a>
 - <a href="#désinstallation">Désinstallation</a>
 - <a href="#utilisation">Utilisation</a>
 - <a href="#remerciements">Remerciements</a>
 - <a href="#contact">Contact</a>
-
 
 
 ## Présentations
@@ -134,28 +108,13 @@ Mais j'ai quand même fait en sorte, au meilleur de mes compétences, de **rédu
 - **Tout ce qu'un bon dev aurait pu ajouté, et tout ce que je n'ai pas encore ajouté**.
 
 
-## Installation
-
-### Téléchargement
-- À droite de cette page, section **Release** latest ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases). Puis tout en bas de la Release la section "Assets".
-
 ### Installation
-#### Via l'installateur
-- Lancez le Setup.exe.
+1. Téléchargez le Setup.exe dans la section **Release** latest (**1.1**) ou [en cliquant ici](https://github.com/AnthoB-Dev/GPODofus3/releases). Puis tout en bas de la Release la section "Assets".
+2. Puis lancez le Setup.exe pour installer GPOD3.
 
-#### Avec le source code (zip)
-Je ne supporte pour l'instant plus l'utilisation via source code.
-
-### Mise à jour
-Pour mettre à jour l'application vous devez :
-1. Sauvegarder votre progression depuis les options de GPOD3.
-2. Télécharger et installer le Setup.exe de la nouvelle version.
-3. Charger sa sauvegarde depuis les options de GPOD3.
  
 ### Désinstallation 
-
-#### Si installé via Setup.exe
-- Vous pouvez supprimer l'application depuis "**Ajouter ou supprimer des programmes**" sous Windows.
+- Désinstallez GPODofus3 depuis "**Ajouter ou supprimer des programmes**" sous Windows.
 
 
 ## Utilisation
@@ -177,6 +136,5 @@ Je vous remercie d'être les premiers utilisateurs hors entourage à utiliser un
 Pour tout contact au sujet de l'application, vous pouvez :
 - Me mp sur Discord : **shiinasan.**
 - M'envoyer un email : **bonis.anthony.dev@gmail.com**
-- Ou bien me mp sur le serveur Brial 2 : **/w Fecashiina GPOD3 -**
 
 Certaines illustrations sont la propriété d'Ankama Games, d'autre de <a href="https://icones8.fr/">Icones8</a> - Tous droits réservés.
