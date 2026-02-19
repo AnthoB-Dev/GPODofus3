@@ -46,8 +46,8 @@ Application desktop pour suivre votre progression dans Dofus, basée sur le guid
 ### Linux
 
 1. Rendez-vous sur la page [Releases](https://github.com/AnthoB-Dev/GPODofus3/releases)
-2. Téléchargez le fichier `.AppImage` ou `.deb` selon votre distribution
-3. Pour AppImage : Rendez le fichier exécutable puis lancez-le
+2. Téléchargez le fichier `.AppImage`
+3. Rendez le fichier exécutable puis lancez-le
    ```bash
    chmod +x GPODofus3_*.AppImage
    ./GPODofus3_*.AppImage
